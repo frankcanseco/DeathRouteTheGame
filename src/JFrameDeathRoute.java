@@ -43,8 +43,14 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private Mutante M2;
     private Mutante M3;
     private Mutante M4;
-    private Carretera carretera;//objeto carretera
-    private Carretera carretera2;//objeto carretera2 para simular continuidad
+    private Fondo carretera;//objeto carretera
+    private Fondo carretera2;//objeto carretera2 para simular continuidad
+    private Fondo desierto;//objeto desierto
+    private Fondo desierto2;//objeto desierto2 para simular continuidad en movimiento
+    private Fondo selva;//objeto selva
+    private Fondo selva2;//objeto selva2 para simular continuidad
+    private Fondo ciudad;//objeto ciudad
+    private Fondo ciudad2;//objeto ciudad2 para simular continuidad
     private Image Selva;//Se declaran las variables de imagenes
     private Image Ciudad;
     private Image Desierto;
@@ -84,7 +90,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         cambio = 1;
         camionVx =0;
         camionVy = 0;
-        velocidadCalle = 5;
+        velocidadCalle = 15;
         Selva = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/selva.png"));
         Ciudad = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/ciudad.png"));
         Desierto = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/desierto.png"));
@@ -101,8 +107,14 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         cam = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/van.gif"));
         credits = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/credits.png"));
         camion = new Jugador((int) (this.getWidth()/2),(int)((this.getHeight()/2)),cam);//se inicializan los objetos
-        carretera = new Carretera(206, 0, Calle);
-        carretera2 = new Carretera(206, -820, Calle);
+        carretera = new Fondo(206, 0, Calle);
+        carretera2 = new Fondo(206, -820, Calle);
+        desierto = new Fondo(0, 0, Desierto);
+        desierto2 = new Fondo(0, -820, Desierto);
+        ciudad = new Fondo(0, 0, Ciudad);
+        ciudad2 = new Fondo(0, -820, Ciudad);
+        selva = new Fondo(0, 0, Selva);
+        selva2 = new Fondo(0, -820, Selva);
         play = new Botones(270,150,Iplay);
         options = new Botones (270 , 450 , Ioptions);
         bcredits = new Botones (270,600,Icredits);
@@ -210,15 +222,28 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             camion.setPosX(camion.getPosX()+camionVx);
             camion.setPosY(camion.getPosY()+camionVy);
             
-            //movimiento infinito de la carretera
+            //movimiento infinito de la carretera, selva, ciudad, desierto
             carretera.setPosY(carretera.getPosY()+velocidadCalle);
             carretera2.setPosY(carretera2.getPosY()+velocidadCalle);
+            desierto.setPosY(desierto.getPosY()+velocidadCalle);
+            desierto2.setPosY(desierto2.getPosY()+velocidadCalle);
+            selva.setPosY(selva.getPosY()+velocidadCalle);
+            selva2.setPosY(selva2.getPosY()+velocidadCalle);
+            ciudad.setPosY(ciudad.getPosY()+velocidadCalle);
+            ciudad2.setPosY(ciudad2.getPosY()+velocidadCalle);
             if (carretera.getPosY() > this.getHeight()){
-                carretera.setPosY(0);
+                carretera.setPosY(carretera2.getPosY()-800);
+                desierto.setPosY(desierto2.getPosY()-800);
+                selva.setPosY(selva2.getPosY()-800);
+                ciudad.setPosY(ciudad2.getPosY()-800);
             }
             if (carretera2.getPosY() > this.getHeight()){
-                carretera2.setPosY(0);
+                carretera2.setPosY(carretera.getPosY()-800);
+                desierto2.setPosY(desierto.getPosY()-800);
+                selva2.setPosY(selva.getPosY()-800);
+                ciudad2.setPosY(ciudad.getPosY()-800);
             }
+
         }
     }
     
@@ -324,8 +349,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
      */
     public void paint1(Graphics g) {
         if (camion != null) {
-            //Dibuja la imagen en la posicion actualizada
-            
+            //Dibuja la imagen en la posicion actualizada            
             switch(ventana){
                 case 1:
                     g.drawImage(play.getImagenI(), play.getPosX(), play.getPosY(), this);
@@ -339,14 +363,17 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     
                 case 2:
                     if (cambio % 3==1){
-                        g.drawImage(Desierto, 0, 0, this);
+                        g.drawImage(desierto.getImagenI(), desierto.getPosX(), desierto.getPosY(), this);
+                        g.drawImage(desierto2.getImagenI(), desierto2.getPosX(), desierto2.getPosY(), this);
                     }
                     else{
                         if (cambio % 3 ==2){
-                            g.drawImage(Ciudad, 0, 0, this);
+                            g.drawImage(ciudad.getImagenI(), ciudad.getPosX(), ciudad.getPosY(), this);
+                            g.drawImage(ciudad2.getImagenI(), ciudad2.getPosX(), ciudad2.getPosY(), this);
                         }
                         else{
-                            g.drawImage(Selva, 0, 0, this);
+                            g.drawImage(selva.getImagenI(), selva.getPosX(), selva.getPosY(), this);
+                            g.drawImage(selva2.getImagenI(), selva2.getPosX(), selva2.getPosY(), this);
                         }
                     }
                     g.drawImage(carretera.getImagenI(), carretera.getPosX(), carretera.getPosY(), this);
@@ -361,8 +388,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     
                 case 5:
                     g.drawImage(credits, 0, 0, this);
-
-                    
+                    break;
             }
         }
         else{
