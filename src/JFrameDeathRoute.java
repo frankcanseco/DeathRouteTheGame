@@ -39,10 +39,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private Botones options;
     private Botones bcredits;
     private Botones howtoplay;
-    private Mutante M1;//objetos mutantes enemigos
-    private Mutante M2;
-    private Mutante M3;
-    private Mutante M4;
+    private LinkedList<Mutante> mutantes; //objetos mutantes enemigos
     private Carretera carretera;//objeo carretera
     private Image Selva;//Se declaran las variables de imagenes
     private Image Ciudad;
@@ -66,7 +63,11 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private int dy;
     private int camionVx;
     private int camionVy;
+    private int entradaMut;
+    private int entradaMutY;
     private int velocidadCalle; //velocidad a la que se mueve la calle
+    private long tiempoActual;
+    private long tiempoZombie;
     public JFrameDeathRoute(){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Death Route"); setSize(800, 820);
@@ -79,6 +80,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         cambio = 1;
         camionVx =0;
         camionVy = 0;
+        tiempoActual = 0;
         velocidadCalle = 2;
         Selva = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/selva.png"));
         Ciudad = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/ciudad.png"));
@@ -100,10 +102,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         options = new Botones (270 , 450 , Ioptions);
         bcredits = new Botones (270,600,Icredits);
         howtoplay = new Botones (270,300,Ihowtoplay);
-        M1 = new Mutante (300,700,im1,2);
-        M2 = new Mutante (500,200,im2,2);
-        M3 = new Mutante (600,600,im3,2);
-        M4 = new Mutante (200,200,im4,2);
+        mutantes = new LinkedList();
         this.setBackground(Color.BLACK);
         addKeyListener(this);   
         addMouseListener(this);
@@ -154,36 +153,59 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
      */
     public void actualiza() {
         if (ventana == 2){
-            dx = camion.getPosX() - M1.getPosX();
-            dy = camion.getPosY() - M1.getPosY();
-            norm = (float) Math.sqrt(dx * dx + dy * dy);
-            dx = (int) (dx * (M1.getVelocidad() / norm));
-            dy = (int) (dy * (M1.getVelocidad()  / norm));
-            M1.setPosX(M1.getPosX()+dx);
-            M1.setPosY(M1.getPosY()+dy);
-            dx = camion.getPosX() - M2.getPosX();
-            dy = camion.getPosY() - M2.getPosY();
-            norm = (float) Math.sqrt(dx * dx + dy * dy);
-            dx = (int) (dx * (M2.getVelocidad() / norm));
-            dy = (int) (dy * (M2.getVelocidad()  / norm));
-            M2.setPosX(M2.getPosX()+dx);
-            M2.setPosY(M2.getPosY()+dy);
-            dx = camion.getPosX() - M3.getPosX();
-            dy = camion.getPosY() - M3.getPosY();
-            norm = (float) Math.sqrt(dx * dx + dy * dy);
-            dx = (int) (dx * (M3.getVelocidad() / norm));
-            dy = (int) (dy * (M3.getVelocidad()  / norm));
-            M3.setPosX(M3.getPosX()+dx);
-            M3.setPosY(M3.getPosY()+dy);
-            dx = camion.getPosX() - M4.getPosX();
-            dy = camion.getPosY() - M4.getPosY();
-            norm = (float) Math.sqrt(dx * dx + dy * dy);
-            dx = (int) (dx * (M4.getVelocidad() / norm));
-            dy = (int) (dy * (M4.getVelocidad()  / norm));
-            M4.setPosX(M4.getPosX()+dx);
-            M4.setPosY(M4.getPosY()+dy);
             camion.setPosX(camion.getPosX()+camionVx);
             camion.setPosY(camion.getPosY()+camionVy);
+            for (Mutante mut:mutantes){
+                dx = camion.getPosX() - mut.getPosX();
+                dy = camion.getPosY() - mut.getPosY();
+                norm = (float) Math.sqrt(dx * dx + dy * dy);
+                dx = (int) (dx * (mut.getVelocidad() / norm));
+                dy = (int) (dy * (mut.getVelocidad()  / norm));
+                mut.setPosX(mut.getPosX()+dx);
+                mut.setPosY(mut.getPosY()+dy);
+            }
+            if (System.currentTimeMillis()-tiempoActual >= 60000){
+                cambio++;
+                tiempoActual = System.currentTimeMillis();
+                tiempoZombie = System.currentTimeMillis();
+            }
+            if (cambio%10<4){
+                if (System.currentTimeMillis()-tiempoZombie >= 60000/6){
+                    if (Math.random()>= .5){
+                        entradaMut = -30;
+                    }
+                    else{
+                        entradaMut = this.getWidth();
+                    }
+                    entradaMutY = (int) (Math.random()*(this.getHeight() - 150) + 150);
+                    mutantes.push(new Mutante(entradaMut,entradaMutY,im2,2));
+                    tiempoZombie = System.currentTimeMillis();
+                }
+            }
+            else{
+                if(cambio%10<8){
+                    if (Math.random()>= .5){
+                        entradaMut = -30;
+                    }
+                    else{
+                        entradaMut = this.getWidth();
+                    }
+                    entradaMutY = (int) (Math.random()*(this.getHeight() - 150) + 150);
+                    mutantes.push(new Mutante(entradaMut,entradaMutY,im2,2));
+                    tiempoZombie = System.currentTimeMillis();
+                }
+                else{
+                    if (Math.random()>= .5){
+                        entradaMut = -30;
+                    }
+                    else{
+                        entradaMut = this.getWidth();
+                    }
+                    entradaMutY = (int) (Math.random()*(this.getHeight() - 150) + 150);
+                    mutantes.push(new Mutante(entradaMut,entradaMutY,im2,2));
+                    tiempoZombie = System.currentTimeMillis();
+                }
+            }
         }
     }
     
@@ -256,6 +278,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             if(e.getPoint().getX()>= 270 && e.getPoint().getX() <= 560){
                 if (e.getPoint().getY()>= 150 && e.getPoint().getY() <= 250){
                     ventana = 2;
+                    tiempoActual = System.currentTimeMillis();
                 }
                 if (e.getPoint().getY()>= 600 && e.getPoint().getY() <= 700){
                     ventana = 5;
@@ -314,10 +337,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 g.drawImage(Calle, 206, 0, this);
                 g.drawImage(bar, 0, 20, this);
                 g.drawImage(camion.getImagenI(), camion.getPosX(), camion.getPosY(), this);
-                g.drawImage(M1.getImagenI(), M1.getPosX(), M1.getPosY(), this);
-                g.drawImage(M2.getImagenI(), M2.getPosX(), M2.getPosY(), this);
-                g.drawImage(M3.getImagenI(), M3.getPosX(), M3.getPosY(), this);
-                g.drawImage(M4.getImagenI(), M4.getPosX(), M4.getPosY(), this);
+                for (Mutante mut:mutantes){
+                    g.drawImage(mut.getImagenI(), mut.getPosX(), mut.getPosY(), this);
+                }
             }
             if(ventana == 5){//dibuja los creditos
                 g.drawImage(credits, 0, 0, this);
