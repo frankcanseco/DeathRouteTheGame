@@ -43,6 +43,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private Mutante M2;
     private Mutante M3;
     private Mutante M4;
+    private Carretera carretera;//objeo carretera
     private Image Selva;//Se declaran las variables de imagenes
     private Image Ciudad;
     private Image Desierto;
@@ -65,6 +66,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private int dy;
     private int camionVx;
     private int camionVy;
+    private int velocidadCalle; //velocidad a la que se mueve la calle
     public JFrameDeathRoute(){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Death Route"); setSize(800, 820);
@@ -77,6 +79,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         cambio = 1;
         camionVx =0;
         camionVy = 0;
+        velocidadCalle = 2;
         Selva = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/selva.png"));
         Ciudad = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/ciudad.png"));
         Desierto = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/desierto.png"));
