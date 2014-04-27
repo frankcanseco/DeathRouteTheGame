@@ -195,7 +195,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 carretera.setPosY(0);
             }
             if (carretera2.getPosY() > this.getHeight()){
-                carretera2.setPosY(0);
+                carretera2.setPosY(carretera.getPosY()-820);
             }
         }
     }
