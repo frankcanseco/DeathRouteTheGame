@@ -67,13 +67,10 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private int dy;
     private int camionVx;
     private int camionVy;
-<<<<<<< HEAD
     private String nombreArchivo;    //Nombre del archivo.
-
-        
-=======
+    private Vector vec;    // Objeto vector para agregar el puntaje.
     private int velocidadCalle; //velocidad a la que se mueve la calle
->>>>>>> 4b440172cd0cce76fea34934a8fd928101128ea1
+    
     public JFrameDeathRoute(){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Death Route"); setSize(800, 820);
@@ -115,6 +112,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         M4 = new Mutante (200,200,im4,2);
         this.setBackground(Color.BLACK);
         nombreArchivo = "Puntaje.txt";
+        vec = new Vector();
         addKeyListener(this);   
         addMouseListener(this);
     }
