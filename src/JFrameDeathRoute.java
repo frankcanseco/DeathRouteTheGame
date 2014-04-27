@@ -67,6 +67,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private int dy;
     private int camionVx;
     private int camionVy;
+    private boolean guardar;
     private String nombreArchivo;    //Nombre del archivo.
     private Vector vec;    // Objeto vector para agregar el puntaje.
     private int velocidadCalle; //velocidad a la que se mueve la calle
@@ -146,6 +147,22 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             checaColision();
             // Se actualiza el <code>Applet</code> repintando el contenido.
             repaint();
+            if (guardar) {
+                guardar = false;
+                try {
+                    //leeArchivo();    
+                    //lee el contenido del archivo
+                    //Agrega el contenido del nuevo puntaje al vector.
+                    //guarda posX del carrodel carro, posX y posY y velX y velY popo
+                    vec.removeAllElements();
+                    //vec.add(new Puntaje());
+                    //Graba el vector en el archivo.
+                    grabaArchivo();
+                } catch (IOException ex) {
+
+                    System.out.println("Error en " + ex.toString());
+                }
+            }
             try {
                 // El thread se duerme.
                 Thread.sleep(20);
@@ -308,38 +325,44 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     public void paint1(Graphics g) {
         if (camion != null) {
             //Dibuja la imagen en la posicion actualizada
-            if (ventana == 1){//dibuja el menu
-                g.drawImage(play.getImagenI(), play.getPosX(), play.getPosY(), this);
-                g.drawImage(options.getImagenI(), options.getPosX(), options.getPosY(), this);
-                g.drawImage(bcredits.getImagenI(), bcredits.getPosX(), bcredits.getPosY(), this);
-                g.drawImage(howtoplay.getImagenI(), howtoplay.getPosX(), howtoplay.getPosY(), this);
-                g.setColor(Color.white);
-                g.setFont(new Font("default", Font.BOLD, 20));
-                g.drawString("Solo use clicks. Funcionan play y credits",20, 60);
-            }
-            if (ventana==2){//dibuja el juego
-                if (cambio % 3==1){
-                    g.drawImage(Desierto, 0, 0, this);
-                }
-                else{
-                    if (cambio % 3 ==2){
-                        g.drawImage(Ciudad, 0, 0, this);
+            
+            switch(ventana){
+                case 1:
+                    g.drawImage(play.getImagenI(), play.getPosX(), play.getPosY(), this);
+                    g.drawImage(options.getImagenI(), options.getPosX(), options.getPosY(), this);
+                    g.drawImage(bcredits.getImagenI(), bcredits.getPosX(), bcredits.getPosY(), this);
+                    g.drawImage(howtoplay.getImagenI(), howtoplay.getPosX(), howtoplay.getPosY(), this);
+                    g.setColor(Color.white);
+                    g.setFont(new Font("default", Font.BOLD, 20));
+                    g.drawString("Solo use clicks. Funcionan play y credits",20, 60);
+                    break;
+                    
+                case 2:
+                    if (cambio % 3==1){
+                        g.drawImage(Desierto, 0, 0, this);
                     }
                     else{
-                        g.drawImage(Selva, 0, 0, this);
+                        if (cambio % 3 ==2){
+                            g.drawImage(Ciudad, 0, 0, this);
+                        }
+                        else{
+                            g.drawImage(Selva, 0, 0, this);
+                        }
                     }
-                }
-                g.drawImage(carretera.getImagenI(), carretera.getPosX(), carretera.getPosY(), this);
-                g.drawImage(carretera2.getImagenI(), carretera2.getPosX(), carretera2.getPosY(), this);
-                g.drawImage(bar, 0, 20, this);
-                g.drawImage(camion.getImagenI(), camion.getPosX(), camion.getPosY(), this);
-                g.drawImage(M1.getImagenI(), M1.getPosX(), M1.getPosY(), this);
-                g.drawImage(M2.getImagenI(), M2.getPosX(), M2.getPosY(), this);
-                g.drawImage(M3.getImagenI(), M3.getPosX(), M3.getPosY(), this);
-                g.drawImage(M4.getImagenI(), M4.getPosX(), M4.getPosY(), this);
-            }
-            if(ventana == 5){//dibuja los creditos
-                g.drawImage(credits, 0, 0, this);
+                    g.drawImage(carretera.getImagenI(), carretera.getPosX(), carretera.getPosY(), this);
+                    g.drawImage(carretera2.getImagenI(), carretera2.getPosX(), carretera2.getPosY(), this);
+                    g.drawImage(bar, 0, 20, this);
+                    g.drawImage(camion.getImagenI(), camion.getPosX(), camion.getPosY(), this);
+                    g.drawImage(M1.getImagenI(), M1.getPosX(), M1.getPosY(), this);
+                    g.drawImage(M2.getImagenI(), M2.getPosX(), M2.getPosY(), this);
+                    g.drawImage(M3.getImagenI(), M3.getPosX(), M3.getPosY(), this);
+                    g.drawImage(M4.getImagenI(), M4.getPosX(), M4.getPosY(), this);
+                    break;
+                    
+                case 5:
+                    g.drawImage(credits, 0, 0, this);
+
+                    
             }
         }
         else{
