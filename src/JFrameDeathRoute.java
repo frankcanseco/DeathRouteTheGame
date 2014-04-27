@@ -43,7 +43,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private Mutante M2;
     private Mutante M3;
     private Mutante M4;
-    private Carretera carretera;//objeo carretera
+    private Carretera carretera;//objeto carretera
+    private Carretera carretera2;//objeto carretera2 para simular continuidad
     private Image Selva;//Se declaran las variables de imagenes
     private Image Ciudad;
     private Image Desierto;
@@ -73,13 +74,13 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         init();
         start();
     }
-    
+
     public void init(){
         ventana = 1;//se inicializa con menu
         cambio = 1;
         camionVx =0;
         camionVy = 0;
-        velocidadCalle = 2;
+        velocidadCalle = 5;
         Selva = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/selva.png"));
         Ciudad = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/ciudad.png"));
         Desierto = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/desierto.png"));
@@ -96,6 +97,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         cam = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/van.gif"));
         credits = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/credits.png"));
         camion = new Jugador((int) (this.getWidth()/2),(int)((this.getHeight()/2)),cam);//se inicializan los objetos
+        carretera = new Carretera(206, 0, Calle);
+        carretera2 = new Carretera(206, -820, Calle);
         play = new Botones(270,150,Iplay);
         options = new Botones (270 , 450 , Ioptions);
         bcredits = new Botones (270,600,Icredits);
@@ -184,6 +187,16 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             M4.setPosY(M4.getPosY()+dy);
             camion.setPosX(camion.getPosX()+camionVx);
             camion.setPosY(camion.getPosY()+camionVy);
+            
+            //movimiento infinito de la carretera
+            carretera.setPosY(carretera.getPosY()+velocidadCalle);
+            carretera2.setPosY(carretera2.getPosY()+velocidadCalle);
+            if (carretera.getPosY() > this.getHeight()){
+                carretera.setPosY(0);
+            }
+            if (carretera2.getPosY() > this.getHeight()){
+                carretera2.setPosY(0);
+            }
         }
     }
     
@@ -311,7 +324,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                         g.drawImage(Selva, 0, 0, this);
                     }
                 }
-                g.drawImage(Calle, 206, 0, this);
+                g.drawImage(carretera.getImagenI(), carretera.getPosX(), carretera.getPosY(), this);
+                g.drawImage(carretera2.getImagenI(), carretera2.getPosX(), carretera2.getPosY(), this);
                 g.drawImage(bar, 0, 20, this);
                 g.drawImage(camion.getImagenI(), camion.getPosX(), camion.getPosY(), this);
                 g.drawImage(M1.getImagenI(), M1.getPosX(), M1.getPosY(), this);
