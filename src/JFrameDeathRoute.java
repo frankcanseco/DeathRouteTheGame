@@ -65,6 +65,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private int dy;
     private int camionVx;
     private int camionVy;
+    private String nombreArchivo;    //Nombre del archivo.
+
+        
     public JFrameDeathRoute(){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Death Route"); setSize(800, 820);
@@ -102,6 +105,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         M3 = new Mutante (600,600,im3,2);
         M4 = new Mutante (200,200,im4,2);
         this.setBackground(Color.BLACK);
+        nombreArchivo = "Puntaje.txt";
         addKeyListener(this);   
         addMouseListener(this);
     }
@@ -326,4 +330,15 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         }
     }
    
+    public void grabaArchivo() throws IOException {
+        PrintWriter fileOut = new PrintWriter(new FileWriter(nombreArchivo));
+        for (int i = 0; i < vec.size(); i++) {
+            Puntaje x;
+            x = (Puntaje) vec.get(i);
+            fileOut.println(x.toString());
+        }
+        fileOut.close();
+    }
+
+    
 }
