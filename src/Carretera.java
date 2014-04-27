@@ -16,7 +16,7 @@ public class Carretera extends Base {
 
         super(posX, posY, m);	//constructor
         //Se cargan las imágenes(cuadros) para la animación del malo
-        Image van = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/van.gif"));
+        Image van = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/carretera.png"));
 
         //Se crea una nueva animacion con la inizialicacion dada
         animCarretera = new Animacion();
