@@ -347,6 +347,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         }
         else{
             if (e.getKeyCode() == KeyEvent.VK_S){
+                velocidadCalle = 10;
                 if (camionVx != 0){
                     camionVy = 2;
                     camionVx -= camionVx;
@@ -362,11 +363,13 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     }
 
     public void keyReleased(KeyEvent e) {
+         
          if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_D){
              camionVx = 0;
          }
          if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_S){
              camionVy = 0;
+             velocidadCalle = 15;
          }
     }
 
