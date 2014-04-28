@@ -29,6 +29,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, MouseListener{
     
@@ -309,7 +310,16 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 camion.setPosX(594-camion.getAncho());
             }
         }
-        for (Mutante mut:mutantes) { //colision entre mutantes y carro
+        if (camion.getPosY()<140){//Checa que el camion  no se salga de la carretera
+            camion.setPosY(140);
+        }
+        else{
+            if (camion.getPosY()+camion.getAlto()>getHeight()){
+                camion.setPosY(getHeight()-camion.getAlto());
+            }
+        }
+
+        for (Mutante mut:mutantes) {
             if(mut.intersecta(camion)){
                 damageTempo = 0;
                 vidaJugador-=mut.getDamage();
@@ -400,6 +410,18 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 if (e.getPoint().getY()>= 150 && e.getPoint().getY() <= 250){
                     ventana = 2;
                     tiempoActual = System.currentTimeMillis();
+                }
+                if (e.getPoint().getY() >= 255 && e.getPoint().getY() <= 300) {
+                    String nombre = JOptionPane.showInputDialog("Cual es tu nombre?");
+                    try {
+
+                        nombreJugador = nombre;
+                        //Graba el vector en el archivo.
+                        grabaArchivoNombre();
+                    } catch (IOException ex) {
+                        System.out.println("Error en " + ex.toString());
+                    }
+
                 }
                 if (e.getPoint().getY()>= 600 && e.getPoint().getY() <= 700){
                     ventana = 5;
@@ -503,8 +525,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     
     public void grabaArchivoNombre() throws IOException {
         PrintWriter fileOut = new PrintWriter(new FileWriter(nombreArchivoJugador));
-        String x = "Juan";
-        fileOut.println(x.toString());
+        fileOut.println(nombreJugador);
         fileOut.close();
     }
 
