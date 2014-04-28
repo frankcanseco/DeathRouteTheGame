@@ -17,14 +17,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
-import java.util.LinkedList;
-import java.awt.Point;
-import java.util.Vector;
-import javax.swing.JFrame;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.LinkedList;
+import java.util.Vector;
+import javax.swing.JFrame;
 import java.io.PrintWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -75,6 +74,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private int entradaMut;
     private int entradaMutY;
     private int velocidadCalle; //velocidad a la que se mueve la calle
+    private int vidaJugador;    //vida del jugador, empieza en 100 y va reduciendo por el damageZombie
+    private int damageZombie;   //valor que representa el damage que quita el zombie
     private long tiempoActual;
     private long tiempoZombie;
     private boolean guardar;
@@ -96,6 +97,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         camionVx =0;
         camionVy = 0;
         velocidadCalle = 15;
+        vidaJugador = 100;
+        damageZombie = 11;
         Selva = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/selva.png"));
         Ciudad = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/ciudad.png"));
         Desierto = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/desierto.png"));
@@ -224,12 +227,13 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                         entradaMut = this.getWidth();
                     }
                     entradaMutY = (int) (Math.random()*(this.getHeight() - 150) + 150);
-                    mutantes.push(new Mutante(entradaMut,entradaMutY,im2,2));
+                    mutantes.push(new Mutante(entradaMut,entradaMutY,im2,2, damageZombie));
                     tiempoZombie = System.currentTimeMillis();
                 }
             }
             else{
                 if(cambio%10<8){
+                   if (System.currentTimeMillis()-tiempoZombie >= 60000/9){
                     if (Math.random()>= .5){
                         entradaMut = -30;
                     }
@@ -237,10 +241,12 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                         entradaMut = this.getWidth();
                     }
                     entradaMutY = (int) (Math.random()*(this.getHeight() - 150) + 150);
-                    mutantes.push(new Mutante(entradaMut,entradaMutY,im2,2));
+                    mutantes.push(new Mutante(entradaMut,entradaMutY,im2,2, damageZombie));
                     tiempoZombie = System.currentTimeMillis();
                 }
+                }
                 else{
+                    if (System.currentTimeMillis()-tiempoZombie >= 60000/12){
                     if (Math.random()>= .5){
                         entradaMut = -30;
                     }
@@ -248,8 +254,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                         entradaMut = this.getWidth();
                     }
                     entradaMutY = (int) (Math.random()*(this.getHeight() - 150) + 150);
-                    mutantes.push(new Mutante(entradaMut,entradaMutY,im2,2));
+                    mutantes.push(new Mutante(entradaMut,entradaMutY,im2,2, damageZombie));
                     tiempoZombie = System.currentTimeMillis();
+                }
                 }
             }
             //movimiento infinito de la carretera, selva, ciudad, desierto
@@ -281,6 +288,21 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
      * las orillas del <code>Applet</code>.
      */
     public void checaColision() {
+
+        if (camion.getPosX()<206){//Checa que el camion  no se salga de la carretera
+            camion.setPosX(206);
+        }
+        else{
+            if (camion.getPosX()+camion.getAncho()>594){
+                camion.setPosX(594-camion.getAncho());
+            }
+        }
+        for (Mutante mut:mutantes) {
+            if(mut.intersecta(camion)){
+                vidaJugador-=mut.getDamage();
+                mut.setDamage(0);
+            }
+        }
     }
     
     /**
@@ -311,19 +333,31 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_A){
-            camionVx = -2;
+            camionVx = -4;
         }
         else{
             if (e.getKeyCode() == KeyEvent.VK_D){
-                camionVx = 2;
+                camionVx = 4;
             }
         }
         if (e.getKeyCode() == KeyEvent.VK_W){
+            if (camionVx != 0){
             camionVy = -2;
+            camionVx -= camionVx;
+            }
+            else{
+                camionVy = -4;
+            }
         }
         else{
             if (e.getKeyCode() == KeyEvent.VK_S){
-                camionVy = 2;
+                if (camionVx != 0){
+                    camionVy = 2;
+                    camionVx -= camionVx;
+                }
+                else{
+                    camionVy = 4;
+                }
             }
         }
     } 
@@ -394,12 +428,12 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     break;
                     
                 case 2:
-                    if (cambio % 3==1){
+                    if (cambio < 11){
                         g.drawImage(desierto.getImagenI(), desierto.getPosX(), desierto.getPosY(), this);
                         g.drawImage(desierto2.getImagenI(), desierto2.getPosX(), desierto2.getPosY(), this);
                     }
                     else{
-                        if (cambio % 3 ==2){
+                        if (cambio < 21){
                             g.drawImage(ciudad.getImagenI(), ciudad.getPosX(), ciudad.getPosY(), this);
                             g.drawImage(ciudad2.getImagenI(), ciudad2.getPosX(), ciudad2.getPosY(), this);
                         }

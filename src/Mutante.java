@@ -13,6 +13,7 @@
 
 public class Mutante extends Base{
     private int velocidad;
+    private int damage;
     /**
      * Metodo constructor usado para crear el objeto Malo
      * @param posX es la <code>posicion en x</code> del objeto.
@@ -20,11 +21,34 @@ public class Mutante extends Base{
      * @param vel es la <code>velocidad</code> del objeto.
      * @param conteo es un <code>contador</code> del objeto.
      */
-    public Mutante(int posX, int posY, Image imagen,int v) {
+    public Mutante(int posX, int posY, Image imagen,int v, int d) {
         super(posX,posY,imagen);
         velocidad = v;
+        damage = d;
     }
+    
+    /**
+     * Metodo que regresa velodiad del Mutante
+     * @return velocidad es la <code> velocidad </code> del objeto
+     */
     public int getVelocidad (){
         return velocidad;
+    }
+    
+    /**
+     * Metodo utilizado para regresar el valor de damage o daño que causa
+     * el zombie al colisionar con el jugador
+     * @return damage es el <code> damage </code> causado por el zombie
+     */
+    public int getDamage (){
+        return damage;
+    }
+    
+    /**
+     * Metodo setter para declarar el daño que causa el zombie
+     * @param d es el <code> damage o daño < /code>  que causa el zombie
+     */
+    public void setDamage (int d){
+        damage = d;
     }
 }
