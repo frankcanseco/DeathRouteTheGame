@@ -18,13 +18,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
-import java.awt.Point;
 import java.util.Vector;
 import javax.swing.JFrame;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -73,6 +68,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private int entradaMut;
     private int entradaMutY;
     private int velocidadCalle; //velocidad a la que se mueve la calle
+    private int vidaJugador;    //vida del jugador, empieza en 100 y va reduciendo por el damageZombie
+    private int damageZombie;   //valor que representa el damage que quita el zombie
     private long tiempoActual;
     private long tiempoZombie;
     private boolean guardar;
@@ -92,6 +89,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         camionVx =0;
         camionVy = 0;
         velocidadCalle = 15;
+        vidaJugador = 100;
+        damageZombie = 11;
         Selva = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/selva.png"));
         Ciudad = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/ciudad.png"));
         Desierto = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/desierto.png"));
@@ -214,7 +213,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                         entradaMut = this.getWidth();
                     }
                     entradaMutY = (int) (Math.random()*(this.getHeight() - 150) + 150);
-                    mutantes.push(new Mutante(entradaMut,entradaMutY,im2,2));
+                    mutantes.push(new Mutante(entradaMut,entradaMutY,im2,2, damageZombie));
                     tiempoZombie = System.currentTimeMillis();
                 }
             }
@@ -227,7 +226,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                         entradaMut = this.getWidth();
                     }
                     entradaMutY = (int) (Math.random()*(this.getHeight() - 150) + 150);
-                    mutantes.push(new Mutante(entradaMut,entradaMutY,im2,2));
+                    mutantes.push(new Mutante(entradaMut,entradaMutY,im2,2, damageZombie));
                     tiempoZombie = System.currentTimeMillis();
                 }
                 else{
@@ -238,7 +237,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                         entradaMut = this.getWidth();
                     }
                     entradaMutY = (int) (Math.random()*(this.getHeight() - 150) + 150);
-                    mutantes.push(new Mutante(entradaMut,entradaMutY,im2,2));
+                    mutantes.push(new Mutante(entradaMut,entradaMutY,im2,2, damageZombie));
                     tiempoZombie = System.currentTimeMillis();
                 }
             }
@@ -271,6 +270,13 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
      * las orillas del <code>Applet</code>.
      */
     public void checaColision() {
+            for (Mutante mut:mutantes) {
+                if(mut.intersecta(camion)){
+                    vidaJugador-=mut.getDamage();
+                    mut.setDamage(0);
+                    System.out.println(vidaJugador);
+                }
+            }
     }
     
     /**
