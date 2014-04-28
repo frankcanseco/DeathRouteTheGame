@@ -220,6 +220,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             }
             else{
                 if(cambio%10<8){
+                   if (System.currentTimeMillis()-tiempoZombie >= 60000/9){
                     if (Math.random()>= .5){
                         entradaMut = -30;
                     }
@@ -230,7 +231,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     mutantes.push(new Mutante(entradaMut,entradaMutY,im2,2));
                     tiempoZombie = System.currentTimeMillis();
                 }
+                }
                 else{
+                    if (System.currentTimeMillis()-tiempoZombie >= 60000/12){
                     if (Math.random()>= .5){
                         entradaMut = -30;
                     }
@@ -240,6 +243,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     entradaMutY = (int) (Math.random()*(this.getHeight() - 150) + 150);
                     mutantes.push(new Mutante(entradaMut,entradaMutY,im2,2));
                     tiempoZombie = System.currentTimeMillis();
+                }
                 }
             }
             //movimiento infinito de la carretera, selva, ciudad, desierto
@@ -271,6 +275,14 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
      * las orillas del <code>Applet</code>.
      */
     public void checaColision() {
+        if (camion.getPosX()<206){//Checa que el camion  no se salga de la carretera
+            camion.setPosX(206);
+        }
+        else{
+            if (camion.getPosX()+camion.getAncho()>594){
+                camion.setPosX(594-camion.getAncho());
+            }
+        }
     }
     
     /**
@@ -301,19 +313,31 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_A){
-            camionVx = -2;
+            camionVx = -4;
         }
         else{
             if (e.getKeyCode() == KeyEvent.VK_D){
-                camionVx = 2;
+                camionVx = 4;
             }
         }
         if (e.getKeyCode() == KeyEvent.VK_W){
+            if (camionVx != 0){
             camionVy = -2;
+            camionVx -= camionVx;
+            }
+            else{
+                camionVy = -4;
+            }
         }
         else{
             if (e.getKeyCode() == KeyEvent.VK_S){
-                camionVy = 2;
+                if (camionVx != 0){
+                    camionVy = 2;
+                    camionVx -= camionVx;
+                }
+                else{
+                    camionVy = 4;
+                }
             }
         }
     } 
@@ -382,12 +406,12 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     break;
                     
                 case 2:
-                    if (cambio % 3==1){
+                    if (cambio < 11){
                         g.drawImage(desierto.getImagenI(), desierto.getPosX(), desierto.getPosY(), this);
                         g.drawImage(desierto2.getImagenI(), desierto2.getPosX(), desierto2.getPosY(), this);
                     }
                     else{
-                        if (cambio % 3 ==2){
+                        if (cambio < 21){
                             g.drawImage(ciudad.getImagenI(), ciudad.getPosX(), ciudad.getPosY(), this);
                             g.drawImage(ciudad2.getImagenI(), ciudad2.getPosX(), ciudad2.getPosY(), this);
                         }
