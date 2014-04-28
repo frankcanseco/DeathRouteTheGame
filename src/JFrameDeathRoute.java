@@ -28,6 +28,8 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, MouseListener{
     
@@ -77,6 +79,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private long tiempoZombie;
     private boolean guardar;
     private String nombreArchivo;    //Nombre del archivo.
+    private String nombreArchivoJugador;
+    private String nombreJugador;
     private Vector vec;    // Objeto vector para agregar el puntaje.
 
     public JFrameDeathRoute(){
@@ -123,9 +127,15 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         mutantes = new LinkedList();
         this.setBackground(Color.BLACK);
         nombreArchivo = "Puntaje.txt";
+        nombreArchivoJugador = "UltimoJugador.txt";
         vec = new Vector();
         addKeyListener(this);   
         addMouseListener(this);
+        try {
+            cargarNombreJugador();
+        } catch (IOException ex) {
+            Logger.getLogger(JFrameDeathRoute.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
      /**
@@ -379,6 +389,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     g.setColor(Color.white);
                     g.setFont(new Font("default", Font.BOLD, 20));
                     g.drawString("Solo use clicks. Funcionan play y credits",20, 60);
+                    g.setFont(new Font("default", Font.BOLD, 20));
+                    g.drawString("Playing as: " + nombreJugador,270,280);
                     break;
                     
                 case 2:
@@ -424,6 +436,29 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             fileOut.println(x.toString());
         }
         fileOut.close();
+    }
+    
+    public void grabaArchivoNombre() throws IOException {
+        PrintWriter fileOut = new PrintWriter(new FileWriter(nombreArchivoJugador));
+        String x = "Juan";
+        fileOut.println(x.toString());
+        fileOut.close();
+    }
+
+    public void cargarNombreJugador() throws IOException {
+        BufferedReader fileIn;
+        try {
+            fileIn = new BufferedReader(new FileReader(nombreArchivoJugador));
+        } catch (FileNotFoundException e) {
+            File nombreJug = new File(nombreArchivoJugador);
+            PrintWriter fileOut = new PrintWriter(nombreJug);
+            fileOut.println("N/A");
+            fileOut.close();
+            fileIn = new BufferedReader(new FileReader(nombreArchivoJugador));
+        }
+        nombreJugador = fileIn.readLine();
+
+        fileIn.close();
     }
 
     
