@@ -6,17 +6,17 @@ import javax.swing.ImageIcon;
  *
  * @author enriquemarroquin
  */
-public class Carretera extends Base {
+public class Fondo extends Base {
 
     protected Animacion animCarretera; //animacion del carro
     private int posX;    //posicion en x.       
     private int posY;    //posicion en y.
 
-    public Carretera(int posX, int posY, Image m) {
+    public Fondo(int posX, int posY, Image m) {
 
         super(posX, posY, m);	//constructor
         //Se cargan las imágenes(cuadros) para la animación del malo
-        Image van = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/van.gif"));
+        Image van = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/carretera.png"));
 
         //Se crea una nueva animacion con la inizialicacion dada
         animCarretera = new Animacion();

@@ -40,7 +40,14 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private Botones bcredits;
     private Botones howtoplay;
     private LinkedList<Mutante> mutantes; //objetos mutantes enemigos
-    private Carretera carretera;//objeo carretera
+    private Fondo carretera;//objeto carretera
+    private Fondo carretera2;//objeto carretera2 para simular continuidad
+    private Fondo desierto;//objeto desierto
+    private Fondo desierto2;//objeto desierto2 para simular continuidad en movimiento
+    private Fondo selva;//objeto selva
+    private Fondo selva2;//objeto selva2 para simular continuidad
+    private Fondo ciudad;//objeto ciudad
+    private Fondo ciudad2;//objeto ciudad2 para simular continuidad
     private Image Selva;//Se declaran las variables de imagenes
     private Image Ciudad;
     private Image Desierto;
@@ -68,20 +75,23 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private int velocidadCalle; //velocidad a la que se mueve la calle
     private long tiempoActual;
     private long tiempoZombie;
+    private boolean guardar;
+    private String nombreArchivo;    //Nombre del archivo.
+    private Vector vec;    // Objeto vector para agregar el puntaje.
+
     public JFrameDeathRoute(){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Death Route"); setSize(800, 820);
         init();
         start();
     }
-    
+
     public void init(){
         ventana = 1;//se inicializa con menu
         cambio = 1;
         camionVx =0;
         camionVy = 0;
-        tiempoActual = 0;
-        velocidadCalle = 2;
+        velocidadCalle = 15;
         Selva = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/selva.png"));
         Ciudad = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/ciudad.png"));
         Desierto = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/desierto.png"));
@@ -98,12 +108,22 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         cam = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/van.gif"));
         credits = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/credits.png"));
         camion = new Jugador((int) (this.getWidth()/2),(int)((this.getHeight()/2)),cam);//se inicializan los objetos
+        carretera = new Fondo(206, 0, Calle);
+        carretera2 = new Fondo(206, -820, Calle);
+        desierto = new Fondo(0, 0, Desierto);
+        desierto2 = new Fondo(0, -820, Desierto);
+        ciudad = new Fondo(0, 0, Ciudad);
+        ciudad2 = new Fondo(0, -820, Ciudad);
+        selva = new Fondo(0, 0, Selva);
+        selva2 = new Fondo(0, -820, Selva);
         play = new Botones(270,150,Iplay);
         options = new Botones (270 , 450 , Ioptions);
         bcredits = new Botones (270,600,Icredits);
         howtoplay = new Botones (270,300,Ihowtoplay);
         mutantes = new LinkedList();
         this.setBackground(Color.BLACK);
+        nombreArchivo = "Puntaje.txt";
+        vec = new Vector();
         addKeyListener(this);   
         addMouseListener(this);
     }
@@ -137,6 +157,22 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             checaColision();
             // Se actualiza el <code>Applet</code> repintando el contenido.
             repaint();
+            if (guardar) {
+                guardar = false;
+                try {
+                    //leeArchivo();    
+                    //lee el contenido del archivo
+                    //Agrega el contenido del nuevo puntaje al vector.
+                    //guarda posX del carrodel carro, posX y posY y velX y velY popo
+                    vec.removeAllElements();
+                    //vec.add(new Puntaje());
+                    //Graba el vector en el archivo.
+                    grabaArchivo();
+                } catch (IOException ex) {
+
+                    System.out.println("Error en " + ex.toString());
+                }
+            }
             try {
                 // El thread se duerme.
                 Thread.sleep(20);
@@ -205,6 +241,27 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     mutantes.push(new Mutante(entradaMut,entradaMutY,im2,2));
                     tiempoZombie = System.currentTimeMillis();
                 }
+            }
+            //movimiento infinito de la carretera, selva, ciudad, desierto
+            carretera.setPosY(carretera.getPosY()+velocidadCalle);
+            carretera2.setPosY(carretera2.getPosY()+velocidadCalle);
+            desierto.setPosY(desierto.getPosY()+velocidadCalle);
+            desierto2.setPosY(desierto2.getPosY()+velocidadCalle);
+            selva.setPosY(selva.getPosY()+velocidadCalle);
+            selva2.setPosY(selva2.getPosY()+velocidadCalle);
+            ciudad.setPosY(ciudad.getPosY()+velocidadCalle);
+            ciudad2.setPosY(ciudad2.getPosY()+velocidadCalle);
+            if (carretera.getPosY() > this.getHeight()){
+                carretera.setPosY(carretera2.getPosY()-800);
+                desierto.setPosY(desierto2.getPosY()-800);
+                selva.setPosY(selva2.getPosY()-800);
+                ciudad.setPosY(ciudad2.getPosY()-800);
+            }
+            if (carretera2.getPosY() > this.getHeight()){
+                carretera2.setPosY(carretera.getPosY()-800);
+                desierto2.setPosY(desierto.getPosY()-800);
+                selva2.setPosY(selva.getPosY()-800);
+                ciudad2.setPosY(ciudad.getPosY()-800);
             }
         }
     }
@@ -312,37 +369,45 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
      */
     public void paint1(Graphics g) {
         if (camion != null) {
-            //Dibuja la imagen en la posicion actualizada
-            if (ventana == 1){//dibuja el menu
-                g.drawImage(play.getImagenI(), play.getPosX(), play.getPosY(), this);
-                g.drawImage(options.getImagenI(), options.getPosX(), options.getPosY(), this);
-                g.drawImage(bcredits.getImagenI(), bcredits.getPosX(), bcredits.getPosY(), this);
-                g.drawImage(howtoplay.getImagenI(), howtoplay.getPosX(), howtoplay.getPosY(), this);
-                g.setColor(Color.white);
-                g.setFont(new Font("default", Font.BOLD, 20));
-                g.drawString("Solo use clicks. Funcionan play y credits",20, 60);
-            }
-            if (ventana==2){//dibuja el juego
-                if (cambio % 3==1){
-                    g.drawImage(Desierto, 0, 0, this);
-                }
-                else{
-                    if (cambio % 3 ==2){
-                        g.drawImage(Ciudad, 0, 0, this);
+            //Dibuja la imagen en la posicion actualizada            
+            switch(ventana){
+                case 1:
+                    g.drawImage(play.getImagenI(), play.getPosX(), play.getPosY(), this);
+                    g.drawImage(options.getImagenI(), options.getPosX(), options.getPosY(), this);
+                    g.drawImage(bcredits.getImagenI(), bcredits.getPosX(), bcredits.getPosY(), this);
+                    g.drawImage(howtoplay.getImagenI(), howtoplay.getPosX(), howtoplay.getPosY(), this);
+                    g.setColor(Color.white);
+                    g.setFont(new Font("default", Font.BOLD, 20));
+                    g.drawString("Solo use clicks. Funcionan play y credits",20, 60);
+                    break;
+                    
+                case 2:
+                    if (cambio % 3==1){
+                        g.drawImage(desierto.getImagenI(), desierto.getPosX(), desierto.getPosY(), this);
+                        g.drawImage(desierto2.getImagenI(), desierto2.getPosX(), desierto2.getPosY(), this);
                     }
                     else{
-                        g.drawImage(Selva, 0, 0, this);
+                        if (cambio % 3 ==2){
+                            g.drawImage(ciudad.getImagenI(), ciudad.getPosX(), ciudad.getPosY(), this);
+                            g.drawImage(ciudad2.getImagenI(), ciudad2.getPosX(), ciudad2.getPosY(), this);
+                        }
+                        else{
+                            g.drawImage(selva.getImagenI(), selva.getPosX(), selva.getPosY(), this);
+                            g.drawImage(selva2.getImagenI(), selva2.getPosX(), selva2.getPosY(), this);
+                        }
                     }
-                }
-                g.drawImage(Calle, 206, 0, this);
-                g.drawImage(bar, 0, 20, this);
-                g.drawImage(camion.getImagenI(), camion.getPosX(), camion.getPosY(), this);
-                for (Mutante mut:mutantes){
-                    g.drawImage(mut.getImagenI(), mut.getPosX(), mut.getPosY(), this);
-                }
-            }
-            if(ventana == 5){//dibuja los creditos
-                g.drawImage(credits, 0, 0, this);
+                    g.drawImage(carretera.getImagenI(), carretera.getPosX(), carretera.getPosY(), this);
+                    g.drawImage(carretera2.getImagenI(), carretera2.getPosX(), carretera2.getPosY(), this);
+                    g.drawImage(bar, 0, 20, this);
+                    g.drawImage(camion.getImagenI(), camion.getPosX(), camion.getPosY(), this);
+                    for (Mutante mut:mutantes){
+                        g.drawImage(mut.getImagenI(), mut.getPosX(), mut.getPosY(), this);
+                    }
+                    break;
+                    
+                case 5:
+                    g.drawImage(credits, 0, 0, this);
+                    break;
             }
         }
         else{
@@ -351,4 +416,15 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         }
     }
    
+    public void grabaArchivo() throws IOException {
+        PrintWriter fileOut = new PrintWriter(new FileWriter(nombreArchivo));
+        for (int i = 0; i < vec.size(); i++) {
+            Puntaje x;
+            x = (Puntaje) vec.get(i);
+            fileOut.println(x.toString());
+        }
+        fileOut.close();
+    }
+
+    
 }
