@@ -66,10 +66,12 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private Image bar;
     private Image credits;
     private Image sangre;
+    private Image carHit;
     private int ventana;//variable para cambio de ventana
     private int cambio;//variable para cambiar fondo
     private float norm;
     private int dx;
+    private int damageTempo; // counter utilizado para la duracion del golpe para la animacion de la van
     private int dy;
     private int camionVx;
     private int camionVy;
@@ -100,6 +102,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         camionVy = 0;
         velocidadCalle = 15;
         vidaJugador = 100;
+        damageTempo = 50;
         damageZombie = 11;
         Selva = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/selva.png"));
         Ciudad = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/ciudad.png"));
@@ -117,6 +120,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         cam = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/van.gif"));
         credits = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/credits.png"));
         sangre = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/sangre.png"));
+        carHit = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/vanHit.gif"));
         camion = new Jugador((int) (this.getWidth()/2),(int)((this.getHeight()/2)),cam);//se inicializan los objetos
         carretera = new Fondo(206, 0, Calle);
         carretera2 = new Fondo(206, -820, Calle);
@@ -172,6 +176,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
            
             actualiza();
             checaColision();
+            damageTempo += 1;
             // Se actualiza el <code>Applet</code> repintando el contenido.
             repaint();
             if (guardar) {
@@ -300,12 +305,13 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             camion.setPosX(206);
         }
         else{
-            if (camion.getPosX()+camion.getAncho()>594){
+            if (camion.getPosX()+camion.getAncho()>594){ // lo mismo
                 camion.setPosX(594-camion.getAncho());
             }
         }
-        for (Mutante mut:mutantes) {
+        for (Mutante mut:mutantes) { //colision entre mutantes y carro
             if(mut.intersecta(camion)){
+                damageTempo = 0;
                 vidaJugador-=mut.getDamage();
                 mut.setDamage(0);
                 mutantes.remove(mut);
@@ -313,6 +319,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 break;
             }
         }
+
     }
     
     /**
@@ -458,7 +465,13 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     g.drawImage(carretera.getImagenI(), carretera.getPosX(), carretera.getPosY(), this);
                     g.drawImage(carretera2.getImagenI(), carretera2.getPosX(), carretera2.getPosY(), this);
                     g.drawImage(bar, 0, 20, this);
-                    g.drawImage(camion.getImagenI(), camion.getPosX(), camion.getPosY(), this);
+                    if(damageTempo<50){
+                        g.drawImage(carHit, camion.getPosX(), camion.getPosY(), this);
+                    }
+                    else{
+                        g.drawImage(camion.getImagenI(), camion.getPosX(), camion.getPosY(), this);    
+                    }
+                    
                     for (Mutante mut:mutantes){
                         g.drawImage(mut.getImagenI(), mut.getPosX(), mut.getPosY(), this);
                     }
