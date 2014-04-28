@@ -41,6 +41,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private Botones bcredits;
     private Botones howtoplay;
     private LinkedList<Mutante> mutantes; //objetos mutantes enemigos
+    private LinkedList<Mutante> restos; //objetos restos
     private Fondo carretera;//objeto carretera
     private Fondo carretera2;//objeto carretera2 para simular continuidad
     private Fondo desierto;//objeto desierto
@@ -64,6 +65,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private Image Ihowtoplay;
     private Image bar;
     private Image credits;
+    private Image sangre;
     private int ventana;//variable para cambio de ventana
     private int cambio;//variable para cambiar fondo
     private float norm;
@@ -114,6 +116,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         bar = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/bar.png"));
         cam = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/van.gif"));
         credits = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/credits.png"));
+        sangre = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/sangre.png"));
         camion = new Jugador((int) (this.getWidth()/2),(int)((this.getHeight()/2)),cam);//se inicializan los objetos
         carretera = new Fondo(206, 0, Calle);
         carretera2 = new Fondo(206, -820, Calle);
@@ -128,6 +131,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         bcredits = new Botones (270,600,Icredits);
         howtoplay = new Botones (270,300,Ihowtoplay);
         mutantes = new LinkedList();
+        restos = new LinkedList();
         this.setBackground(Color.BLACK);
         nombreArchivo = "Puntaje.txt";
         nombreArchivoJugador = "UltimoJugador.txt";
@@ -281,6 +285,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 ciudad2.setPosY(ciudad.getPosY()-800);
             }
         }
+        for (Mutante res:restos) {
+            res.setPosY(res.getPosY()+velocidadCalle);
+        }
     }
     
     /**
@@ -301,6 +308,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             if(mut.intersecta(camion)){
                 vidaJugador-=mut.getDamage();
                 mut.setDamage(0);
+                mutantes.remove(mut);
+                restos.push(new Mutante(mut.getPosX(),mut.getPosY(),sangre,0,0));
+                break;
             }
         }
     }
@@ -451,6 +461,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     g.drawImage(camion.getImagenI(), camion.getPosX(), camion.getPosY(), this);
                     for (Mutante mut:mutantes){
                         g.drawImage(mut.getImagenI(), mut.getPosX(), mut.getPosY(), this);
+                    }
+                    for (Mutante res:restos) {
+                        g.drawImage(res.getImagenI(), res.getPosX(), res.getPosY(), this);
                     }
                     break;
                     
