@@ -17,12 +17,19 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.LinkedList;
 import java.util.Vector;
 import javax.swing.JFrame;
 import java.io.PrintWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, MouseListener{
     
@@ -36,6 +43,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private Botones howtoplay;
     private LinkedList<Mutante> mutantes; //objetos mutantes enemigos
     private LinkedList<Mutante> restos; //objetos restos
+    private Mutante toolbox; // objetos items
+    private Mutante bubbles;
+    private Mutante cactus;
     private Fondo carretera;//objeto carretera
     private Fondo carretera2;//objeto carretera2 para simular continuidad
     private Fondo desierto;//objeto desierto
@@ -48,7 +58,10 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private Image Ciudad;
     private Image Desierto;
     private Image Calle;
-    private Image cam;
+    private Image cam; //sprites utilizadas para los objetos
+    private Image imToolbox;
+    private Image imBubbles;
+    private Image imCactus;
     private Image im1;
     private Image im2;
     private Image im3;
@@ -60,11 +73,13 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private Image bar;
     private Image credits;
     private Image sangre;
+    private Image carHit;
     private int ventana;//variable para cambio de ventana
     private int cambio;//variable para cambiar fondo
     private float norm;
     private long score;
     private int dx;
+    private int damageTempo; // counter utilizado para la duracion del golpe para la animacion de la van
     private int dy;
     private int camionVx;
     private int camionVy;
@@ -77,6 +92,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private long tiempoZombie;
     private boolean guardar;
     private String nombreArchivo;    //Nombre del archivo.
+    private String nombreArchivoJugador;
+    private String nombreJugador;
     private Vector vec;    // Objeto vector para agregar el puntaje.
 
     public JFrameDeathRoute(){
@@ -94,6 +111,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         camionVy = 0;
         velocidadCalle = 15;
         vidaJugador = 100;
+        damageTempo = 50;
         damageZombie = 11;
         Selva = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/selva.png"));
         Ciudad = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/ciudad.png"));
@@ -111,7 +129,14 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         cam = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/van.gif"));
         credits = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/credits.png"));
         sangre = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/sangre.png"));
+        carHit = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/vanHit.gif"));
+        imToolbox = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/toolbox.png"));
+        imBubbles = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/burbujas.gif"));
+        imCactus = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/cactus.png"));
         camion = new Jugador((int) (this.getWidth()/2),(int)((this.getHeight()/2)),cam);//se inicializan los objetos
+        toolbox = new Mutante((int) (this.getWidth()/2),(int)((this.getHeight()/2)),imToolbox, velocidadCalle, 0);
+        bubbles = new Mutante((int) (this.getWidth()/2),(int)((this.getHeight()/2)),imBubbles, velocidadCalle, 0);
+        cactus = new Mutante((int) (this.getWidth()/2),(int)((this.getHeight()/2)),imCactus, velocidadCalle, 0);
         carretera = new Fondo(206, 0, Calle);
         carretera2 = new Fondo(206, -820, Calle);
         desierto = new Fondo(0, 0, Desierto);
@@ -128,9 +153,15 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         restos = new LinkedList();
         this.setBackground(Color.BLACK);
         nombreArchivo = "Puntaje.txt";
+        nombreArchivoJugador = "UltimoJugador.txt";
         vec = new Vector();
         addKeyListener(this);   
         addMouseListener(this);
+        try {
+            cargarNombreJugador();
+        } catch (IOException ex) {
+            Logger.getLogger(JFrameDeathRoute.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
      /**
@@ -160,6 +191,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
            
             actualiza();
             checaColision();
+            damageTempo += 1;
             // Se actualiza el <code>Applet</code> repintando el contenido.
             repaint();
             if (guardar) {
@@ -207,6 +239,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             }
             if (System.currentTimeMillis()-tiempoActual >= 60000){
                 cambio++;
+                score+=100;
                 tiempoActual = System.currentTimeMillis();
                 tiempoZombie = System.currentTimeMillis();
             }
@@ -288,12 +321,22 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             camion.setPosX(206);
         }
         else{
-            if (camion.getPosX()+camion.getAncho()>594){
+            if (camion.getPosX()+camion.getAncho()>594){ // lo mismo
                 camion.setPosX(594-camion.getAncho());
             }
         }
+        if (camion.getPosY()<140){//Checa que el camion  no se salga de la carretera
+            camion.setPosY(140);
+        }
+        else{
+            if (camion.getPosY()+camion.getAlto()>getHeight()){
+                camion.setPosY(getHeight()-camion.getAlto());
+            }
+        }
+
         for (Mutante mut:mutantes) {
             if(mut.intersecta(camion)){
+                damageTempo = 0;
                 vidaJugador-=mut.getDamage();
                 mut.setDamage(0);
                 mutantes.remove(mut);
@@ -301,6 +344,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 break;
             }
         }
+
     }
     
     /**
@@ -349,7 +393,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         }
         else{
             if (e.getKeyCode() == KeyEvent.VK_S){
-                velocidadCalle = 10;
+                velocidadCalle = 13;
                 if (camionVx != 0){
                     camionVy = 3;
                     camionVx = (int) (camionVx/4)*3;
@@ -381,6 +425,18 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 if (e.getPoint().getY()>= 150 && e.getPoint().getY() <= 250){
                     ventana = 2;
                     tiempoActual = System.currentTimeMillis();
+                }
+                if (e.getPoint().getY() >= 255 && e.getPoint().getY() <= 300) {
+                    String nombre = JOptionPane.showInputDialog("Cual es tu nombre?");
+                    try {
+
+                        nombreJugador = nombre;
+                        //Graba el vector en el archivo.
+                        grabaArchivoNombre();
+                    } catch (IOException ex) {
+                        System.out.println("Error en " + ex.toString());
+                    }
+
                 }
                 if (e.getPoint().getY()>= 600 && e.getPoint().getY() <= 700){
                     ventana = 5;
@@ -423,7 +479,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     g.drawImage(howtoplay.getImagenI(), howtoplay.getPosX(), howtoplay.getPosY(), this);
                     g.setColor(Color.white);
                     g.setFont(new Font("default", Font.BOLD, 20));
-                    
+                    g.setFont(new Font("default", Font.BOLD, 20));
+                    g.drawString("Playing as: " + nombreJugador,270,280);
                     break;
                     
                 case 2:
@@ -444,7 +501,13 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     g.drawImage(carretera.getImagenI(), carretera.getPosX(), carretera.getPosY(), this);
                     g.drawImage(carretera2.getImagenI(), carretera2.getPosX(), carretera2.getPosY(), this);
                     g.drawImage(bar, 0, 20, this);
-                    g.drawImage(camion.getImagenI(), camion.getPosX(), camion.getPosY(), this);
+                    if(damageTempo<50){
+                        g.drawImage(carHit, camion.getPosX(), camion.getPosY(), this);
+                    }
+                    else{
+                        g.drawImage(camion.getImagenI(), camion.getPosX(), camion.getPosY(), this);    
+                    }
+                    
                     for (Mutante mut:mutantes){
                         g.drawImage(mut.getImagenI(), mut.getPosX(), mut.getPosY(), this);
                     }
@@ -453,6 +516,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     }
                     g.setColor(Color.white);
                     g.drawString(""+score,700, 80);
+                    g.drawString(""+vidaJugador+"%",10, 130);
+                    g.drawString(""+nombreJugador,10, 70);
+                    g.drawString("Mile"+cambio,350, 100);
                     break;
                     
                 case 5:
@@ -474,6 +540,28 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             fileOut.println(x.toString());
         }
         fileOut.close();
+    }
+    
+    public void grabaArchivoNombre() throws IOException {
+        PrintWriter fileOut = new PrintWriter(new FileWriter(nombreArchivoJugador));
+        fileOut.println(nombreJugador);
+        fileOut.close();
+    }
+
+    public void cargarNombreJugador() throws IOException {
+        BufferedReader fileIn;
+        try {
+            fileIn = new BufferedReader(new FileReader(nombreArchivoJugador));
+        } catch (FileNotFoundException e) {
+            File nombreJug = new File(nombreArchivoJugador);
+            PrintWriter fileOut = new PrintWriter(nombreJug);
+            fileOut.println("N/A");
+            fileOut.close();
+            fileIn = new BufferedReader(new FileReader(nombreArchivoJugador));
+        }
+        nombreJugador = fileIn.readLine();
+
+        fileIn.close();
     }
 
     
