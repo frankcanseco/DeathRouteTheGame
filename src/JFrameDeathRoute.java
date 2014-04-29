@@ -63,6 +63,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private int ventana;//variable para cambio de ventana
     private int cambio;//variable para cambiar fondo
     private float norm;
+    private long score;
     private int dx;
     private int dy;
     private int camionVx;
@@ -88,6 +89,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     public void init(){
         ventana = 1;//se inicializa con menu
         cambio = 1;
+        score = 0;
         camionVx =0;
         camionVy = 0;
         velocidadCalle = 15;
@@ -105,7 +107,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         Ioptions = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/botonOptions.png"));
         Icredits = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/botonCredits.png"));
         Ihowtoplay = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/botonHow.png"));
-        bar = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/bar.png"));
+        bar = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/bar2.png"));
         cam = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/van.gif"));
         credits = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/credits.png"));
         sangre = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/sangre.png"));
@@ -338,8 +340,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         }
         if (e.getKeyCode() == KeyEvent.VK_W){
             if (camionVx != 0){
-            camionVy = -2;
-            camionVx -= camionVx;
+            camionVy = -3;
+            camionVx = (int) (camionVx/4)*3;
             }
             else{
                 camionVy = -4;
@@ -349,8 +351,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             if (e.getKeyCode() == KeyEvent.VK_S){
                 velocidadCalle = 10;
                 if (camionVx != 0){
-                    camionVy = 2;
-                    camionVx -= camionVx;
+                    camionVy = 3;
+                    camionVx = (int) (camionVx/4)*3;
                 }
                 else{
                     camionVy = 4;
@@ -421,7 +423,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     g.drawImage(howtoplay.getImagenI(), howtoplay.getPosX(), howtoplay.getPosY(), this);
                     g.setColor(Color.white);
                     g.setFont(new Font("default", Font.BOLD, 20));
-                    g.drawString("Solo use clicks. Funcionan play y credits",20, 60);
+                    
                     break;
                     
                 case 2:
@@ -449,6 +451,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     for (Mutante res:restos) {
                         g.drawImage(res.getImagenI(), res.getPosX(), res.getPosY(), this);
                     }
+                    g.setColor(Color.white);
+                    g.drawString(""+score,700, 80);
                     break;
                     
                 case 5:
