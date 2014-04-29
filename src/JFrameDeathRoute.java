@@ -132,9 +132,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         imBubbles = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/burbujas.gif"));
         imCactus = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/cactus.png"));
         camion = new Jugador((int) (this.getWidth()/2),(int)((this.getHeight()/2)),cam);//se inicializan los objetos
-        toolbox = new Mutante((int) (this.getWidth()/2),(int)((this.getHeight()/2)),imToolbox);
-        bubbles = new Mutante((int) (this.getWidth()/2),(int)((this.getHeight()/2)),imBubbles);
-        cactus = new Mutante((int) (this.getWidth()/2),(int)((this.getHeight()/2)),imCactus);
+        toolbox = new Mutante((int) (this.getWidth()/2),(int)((this.getHeight()/2)),imToolbox, velocidadCalle, 0);
+        bubbles = new Mutante((int) (this.getWidth()/2),(int)((this.getHeight()/2)),imBubbles, velocidadCalle, 0);
+        cactus = new Mutante((int) (this.getWidth()/2),(int)((this.getHeight()/2)),imCactus, velocidadCalle, 0);
         carretera = new Fondo(206, 0, Calle);
         carretera2 = new Fondo(206, -820, Calle);
         desierto = new Fondo(0, 0, Desierto);
