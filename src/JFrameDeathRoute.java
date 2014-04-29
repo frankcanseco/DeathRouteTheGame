@@ -43,6 +43,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private Botones howtoplay;
     private LinkedList<Mutante> mutantes; //objetos mutantes enemigos
     private LinkedList<Mutante> restos; //objetos restos
+    private Mutante toolbox; // objetos items
+    private Mutante bubbles;
+    private Mutante cactus;
     private Fondo carretera;//objeto carretera
     private Fondo carretera2;//objeto carretera2 para simular continuidad
     private Fondo desierto;//objeto desierto
@@ -55,7 +58,10 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private Image Ciudad;
     private Image Desierto;
     private Image Calle;
-    private Image cam;
+    private Image cam; //sprites utilizadas para los objetos
+    private Image imToolbox;
+    private Image imBubbles;
+    private Image imCactus;
     private Image im1;
     private Image im2;
     private Image im3;
@@ -122,7 +128,13 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         credits = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/credits.png"));
         sangre = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/sangre.png"));
         carHit = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/vanHit.gif"));
+        imToolbox = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/toolbox.png"));
+        imBubbles = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/burbujas.gif"));
+        imCactus = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/cactus.png"));
         camion = new Jugador((int) (this.getWidth()/2),(int)((this.getHeight()/2)),cam);//se inicializan los objetos
+        toolbox = new Mutante((int) (this.getWidth()/2),(int)((this.getHeight()/2)),imToolbox);
+        bubbles = new Mutante((int) (this.getWidth()/2),(int)((this.getHeight()/2)),imBubbles);
+        cactus = new Mutante((int) (this.getWidth()/2),(int)((this.getHeight()/2)),imCactus);
         carretera = new Fondo(206, 0, Calle);
         carretera2 = new Fondo(206, -820, Calle);
         desierto = new Fondo(0, 0, Desierto);
