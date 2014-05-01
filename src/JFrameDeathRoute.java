@@ -241,7 +241,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             if(counterCactus > 300 && numCactusNivel>0){ 
                 int posrX = 206 + (int) (Math.random() * 594);    //cactus aparecen en lugares random en la orilla de arriba
                 int posrY = -2;
-                cactusObj = new Mutante(posrX, posrY, imCactus, velocidadCalle, 0);
+                cactusObj = new Mutante(posrX, posrY, imCactus, velocidadCalle, 10);
                 cactus.add(cactusObj);
                 counterCactus = 0;
                 numCactusNivel--;
@@ -352,21 +352,31 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             }
         }
 
-        for (Mutante mut:mutantes) {
-            if(mut.intersecta(camion)){
-                damageTempo = 0;
-                vidaJugador-=mut.getDamage();
-                mut.setDamage(0);
-                mutantes.remove(mut);
-                restos.push(new Mutante(mut.getPosX(),mut.getPosY(),sangre,0,0));
-                break;
-            }
-            for (Mutante cac:cactus) { 
+        for (Mutante cac:cactus) {
+            for (Mutante mut:mutantes) {
+                if(mut.intersecta(camion)){
+                    damageTempo = 0;
+                    vidaJugador-=mut.getDamage();
+                    mut.setDamage(0);
+                    mutantes.remove(mut);
+                    restos.push(new Mutante(mut.getPosX(),mut.getPosY(),sangre,0,0));
+                    break;
+                }
+                
                 if(cac.intersecta(mut)){
                     mutantes.remove(mut);
                     restos.push(new Mutante(mut.getPosX(),mut.getPosY(),sangre,0,0));
                     break;
                 }
+            }
+            if (cac.intersecta(camion)){
+                if(damageTempo< 50){
+                    vidaJugador-=cac.getDamage();
+                }
+                damageTempo = 0;
+                cac.setDamage(0);
+                camion.setPosY(camion.getPosY()+5);
+                break;
             }
         }
 
@@ -504,8 +514,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     g.drawImage(bcredits.getImagenI(), bcredits.getPosX(), bcredits.getPosY(), this);
                     g.drawImage(howtoplay.getImagenI(), howtoplay.getPosX(), howtoplay.getPosY(), this);
                     g.setColor(Color.white);
-                    g.setFont(new Font("default", Font.BOLD, 20));
-                    g.drawString("Solo use clicks. Funcionan play y credits",20, 60);
+                    //g.setFont(new Font("default", Font.BOLD, 20));
+                    //g.drawString("Solo use clicks. Funcionan play y credits",20, 60);
                     g.setFont(new Font("default", Font.BOLD, 20));
                     g.drawString("Playing as: " + nombreJugador,270,280);
                     break;
@@ -533,7 +543,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     g.drawImage(bar, 0, 20, this);
                     g.setColor(Color.white);
                     g.setFont(new Font("default", Font.BOLD, 20));
-                    g.drawString(nombreJugador , 2, 70);
+                    g.drawString(nombreJugador , 2, 70);                    
+                    g.setFont(new Font("default", Font.BOLD, 20));
+                    g.drawString(""+ vidaJugador, 2, 120);
 
                     if(damageTempo<50){
                         g.drawImage(carHit, camion.getPosX(), camion.getPosY(), this);
