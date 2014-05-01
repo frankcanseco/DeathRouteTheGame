@@ -527,6 +527,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     }
                     g.drawImage(carretera.getImagenI(), carretera.getPosX(), carretera.getPosY(), this);
                     g.drawImage(carretera2.getImagenI(), carretera2.getPosX(), carretera2.getPosY(), this);
+                    for (Mutante cac:cactus){
+                        g.drawImage(cac.getImagenI(), cac.getPosX(), cac.getPosY(), this);
+                    }
                     g.drawImage(bar, 0, 20, this);
 
                     if(damageTempo<50){
@@ -536,9 +539,6 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                         g.drawImage(camion.getImagenI(), camion.getPosX(), camion.getPosY(), this);    
                     }
 
-                    for (Mutante cac:cactus){
-                        g.drawImage(cac.getImagenI(), cac.getPosX(), cac.getPosY(), this);
-                    }
                     for (Mutante mut:mutantes){
                         g.drawImage(mut.getImagenI(), mut.getPosX(), mut.getPosY(), this);
                     }
