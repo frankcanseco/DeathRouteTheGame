@@ -531,6 +531,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                         g.drawImage(cac.getImagenI(), cac.getPosX(), cac.getPosY(), this);
                     }
                     g.drawImage(bar, 0, 20, this);
+                    g.setColor(Color.white);
+                    g.setFont(new Font("default", Font.BOLD, 20));
+                    g.drawString(nombreJugador , 2, 70);
 
                     if(damageTempo<50){
                         g.drawImage(carHit, camion.getPosX(), camion.getPosY(), this);
