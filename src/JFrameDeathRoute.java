@@ -46,6 +46,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private LinkedList<Mutante> cactus;
     private Mutante toolbox; // objetos items
     private Mutante bubbles;
+    private Mutante cactusObj;
     private Fondo carretera;//objeto carretera
     private Fondo carretera2;//objeto carretera2 para simular continuidad
     private Fondo desierto;//objeto desierto
@@ -95,6 +96,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private String nombreArchivoJugador;
     private String nombreJugador;
     private Vector vec;    // Objeto vector para agregar el puntaje.
+    private int numCactusNivel; // numero de cactus por nivel
 
     public JFrameDeathRoute(){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -113,6 +115,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         damageTempo = 50;
         counterCactus = 80;
         damageZombie = 11;
+        numCactusNivel = 5;
         Selva = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/selva.png"));
         Ciudad = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/ciudad.png"));
         Desierto = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/desierto.png"));
@@ -157,6 +160,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         vec = new Vector();
         addKeyListener(this);   
         addMouseListener(this);
+
         try {
             cargarNombreJugador();
         } catch (IOException ex) {
@@ -229,14 +233,20 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         if (ventana == 2){
             camion.setPosX(camion.getPosX()+camionVx);
             camion.setPosY(camion.getPosY()+camionVy);
-            if(counterCactus > 80){ 
-                for (Mutante cac:cactus){
-                    int posrX = 206 + (int) (Math.random() * 594);    //cactus aparecen en lugares random en la orilla de arriba
-                    int posrY = -2;
-                    cactus.push(new Mutante(posrX,posrY,imCactus, velocidadCalle, 0));
-                }
+
+            for (Mutante cac:cactus){
+              cac.setPosY(cac.getPosY()+1);
+            }          
+
+            if(counterCactus > 300 && numCactusNivel>0){ 
+                int posrX = 206 + (int) (Math.random() * 594);    //cactus aparecen en lugares random en la orilla de arriba
+                int posrY = -2;
+                cactusObj = new Mutante(posrX, posrY, imCactus, velocidadCalle, 0);
+                cactus.add(cactusObj);
                 counterCactus = 0;
+                numCactusNivel--;
             }
+            
             for (Mutante mut:mutantes){
                 dx = camion.getPosX() - mut.getPosX();
                 dy = camion.getPosY() - mut.getPosY();
@@ -276,7 +286,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     entradaMutY = (int) (Math.random()*(this.getHeight() - 150) + 150);
                     mutantes.push(new Mutante(entradaMut,entradaMutY,im2,2, damageZombie));
                     tiempoZombie = System.currentTimeMillis();
-                }
+                    }
                 }
                 else{
                     if (System.currentTimeMillis()-tiempoZombie >= 60000/12){
@@ -518,16 +528,17 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     g.drawImage(carretera.getImagenI(), carretera.getPosX(), carretera.getPosY(), this);
                     g.drawImage(carretera2.getImagenI(), carretera2.getPosX(), carretera2.getPosY(), this);
                     g.drawImage(bar, 0, 20, this);
+
                     if(damageTempo<50){
                         g.drawImage(carHit, camion.getPosX(), camion.getPosY(), this);
                     }
                     else{
                         g.drawImage(camion.getImagenI(), camion.getPosX(), camion.getPosY(), this);    
                     }
+
                     for (Mutante cac:cactus){
                         g.drawImage(cac.getImagenI(), cac.getPosX(), cac.getPosY(), this);
                     }
-                    
                     for (Mutante mut:mutantes){
                         g.drawImage(mut.getImagenI(), mut.getPosX(), mut.getPosY(), this);
                     }
