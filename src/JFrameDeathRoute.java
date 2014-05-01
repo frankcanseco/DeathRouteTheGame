@@ -43,6 +43,10 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private Botones howtoplay;
     private LinkedList<Mutante> mutantes; //objetos mutantes enemigos
     private LinkedList<Mutante> restos; //objetos restos
+    private LinkedList<Mutante> cactus;
+    private Mutante toolbox; // objetos items
+    private Mutante bubbles;
+    private Mutante cactusObj;
     private Fondo carretera;//objeto carretera
     private Fondo carretera2;//objeto carretera2 para simular continuidad
     private Fondo desierto;//objeto desierto
@@ -55,7 +59,10 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private Image Ciudad;
     private Image Desierto;
     private Image Calle;
-    private Image cam;
+    private Image cam; //sprites utilizadas para los objetos
+    private Image imToolbox;
+    private Image imBubbles;
+    private Image imCactus;
     private Image im1;
     private Image im2;
     private Image im3;
@@ -81,6 +88,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private int velocidadCalle; //velocidad a la que se mueve la calle
     private int vidaJugador;    //vida del jugador, empieza en 100 y va reduciendo por el damageZombie
     private int damageZombie;   //valor que representa el damage que quita el zombie
+    private int counterCactus;
     private long tiempoActual;
     private long tiempoZombie;
     private boolean guardar;
@@ -88,6 +96,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private String nombreArchivoJugador;
     private String nombreJugador;
     private Vector vec;    // Objeto vector para agregar el puntaje.
+    private int numCactusNivel; // numero de cactus por nivel
 
     public JFrameDeathRoute(){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -104,7 +113,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         velocidadCalle = 15;
         vidaJugador = 100;
         damageTempo = 50;
+        counterCactus = 80;
         damageZombie = 11;
+        numCactusNivel = 5;
         Selva = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/selva.png"));
         Ciudad = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/ciudad.png"));
         Desierto = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/desierto.png"));
@@ -122,7 +133,12 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         credits = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/credits.png"));
         sangre = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/sangre.png"));
         carHit = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/vanHit.gif"));
+        imToolbox = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/toolbox.png"));
+        imBubbles = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/burbujas.gif"));
+        imCactus = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/cactus.png"));
         camion = new Jugador((int) (this.getWidth()/2),(int)((this.getHeight()/2)),cam);//se inicializan los objetos
+        toolbox = new Mutante((int) (this.getWidth()/2),(int)((this.getHeight()/2)),imToolbox, velocidadCalle, 0);
+        bubbles = new Mutante((int) (this.getWidth()/2),(int)((this.getHeight()/2)),imBubbles, velocidadCalle, 0);
         carretera = new Fondo(206, 0, Calle);
         carretera2 = new Fondo(206, -820, Calle);
         desierto = new Fondo(0, 0, Desierto);
@@ -137,12 +153,14 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         howtoplay = new Botones (270,300,Ihowtoplay);
         mutantes = new LinkedList();
         restos = new LinkedList();
+        cactus = new LinkedList(); 
         this.setBackground(Color.BLACK);
         nombreArchivo = "Puntaje.txt";
         nombreArchivoJugador = "UltimoJugador.txt";
         vec = new Vector();
         addKeyListener(this);   
         addMouseListener(this);
+
         try {
             cargarNombreJugador();
         } catch (IOException ex) {
@@ -178,6 +196,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             actualiza();
             checaColision();
             damageTempo += 1;
+            counterCactus += 1;
             // Se actualiza el <code>Applet</code> repintando el contenido.
             repaint();
             if (guardar) {
@@ -214,6 +233,20 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         if (ventana == 2){
             camion.setPosX(camion.getPosX()+camionVx);
             camion.setPosY(camion.getPosY()+camionVy);
+
+            for (Mutante cac:cactus){
+              cac.setPosY(cac.getPosY()+1);
+            }          
+
+            if(counterCactus > 300 && numCactusNivel>0){ 
+                int posrX = 206 + (int) (Math.random() * 594);    //cactus aparecen en lugares random en la orilla de arriba
+                int posrY = -2;
+                cactusObj = new Mutante(posrX, posrY, imCactus, velocidadCalle, 0);
+                cactus.add(cactusObj);
+                counterCactus = 0;
+                numCactusNivel--;
+            }
+            
             for (Mutante mut:mutantes){
                 dx = camion.getPosX() - mut.getPosX();
                 dy = camion.getPosY() - mut.getPosY();
@@ -253,7 +286,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     entradaMutY = (int) (Math.random()*(this.getHeight() - 150) + 150);
                     mutantes.push(new Mutante(entradaMut,entradaMutY,im2,2, damageZombie));
                     tiempoZombie = System.currentTimeMillis();
-                }
+                    }
                 }
                 else{
                     if (System.currentTimeMillis()-tiempoZombie >= 60000/12){
@@ -328,7 +361,15 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 restos.push(new Mutante(mut.getPosX(),mut.getPosY(),sangre,0,0));
                 break;
             }
+            for (Mutante cac:cactus) { 
+                if(cac.intersecta(mut)){
+                    mutantes.remove(mut);
+                    restos.push(new Mutante(mut.getPosX(),mut.getPosY(),sangre,0,0));
+                    break;
+                }
+            }
         }
+
 
     }
     
@@ -378,7 +419,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         }
         else{
             if (e.getKeyCode() == KeyEvent.VK_S){
-                velocidadCalle = 10;
+                velocidadCalle = 13;
                 if (camionVx != 0){
                     camionVy = 2;
                     camionVx -= camionVx;
@@ -486,14 +527,21 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     }
                     g.drawImage(carretera.getImagenI(), carretera.getPosX(), carretera.getPosY(), this);
                     g.drawImage(carretera2.getImagenI(), carretera2.getPosX(), carretera2.getPosY(), this);
+                    for (Mutante cac:cactus){
+                        g.drawImage(cac.getImagenI(), cac.getPosX(), cac.getPosY(), this);
+                    }
                     g.drawImage(bar, 0, 20, this);
+                    g.setColor(Color.white);
+                    g.setFont(new Font("default", Font.BOLD, 20));
+                    g.drawString(nombreJugador , 2, 70);
+
                     if(damageTempo<50){
                         g.drawImage(carHit, camion.getPosX(), camion.getPosY(), this);
                     }
                     else{
                         g.drawImage(camion.getImagenI(), camion.getPosX(), camion.getPosY(), this);    
                     }
-                    
+
                     for (Mutante mut:mutantes){
                         g.drawImage(mut.getImagenI(), mut.getPosX(), mut.getPosY(), this);
                     }
