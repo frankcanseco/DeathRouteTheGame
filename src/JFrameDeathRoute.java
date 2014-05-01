@@ -241,7 +241,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             if(counterCactus > 300 && numCactusNivel>0){ 
                 int posrX = 206 + (int) (Math.random() * 594);    //cactus aparecen en lugares random en la orilla de arriba
                 int posrY = -2;
-                cactusObj = new Mutante(posrX, posrY, imCactus, velocidadCalle, 10);
+                cactusObj = new Mutante(posrX, posrY, imCactus, velocidadCalle, 1);
                 cactus.add(cactusObj);
                 counterCactus = 0;
                 numCactusNivel--;
@@ -370,9 +370,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 }
             }
             if (cac.intersecta(camion)){
-                if(damageTempo< 50){
-                    vidaJugador-=cac.getDamage();
-                }
+                vidaJugador-=cac.getDamage();
                 damageTempo = 0;
                 cac.setDamage(0);
                 camion.setPosY(camion.getPosY()+5);
