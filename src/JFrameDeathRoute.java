@@ -78,6 +78,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private int ventana;//variable para cambio de ventana
     private int cambio;//variable para cambiar fondo
     private float norm;
+    private int scoreJugador; // score juego
     private int dx;
     private int damageTempo; // counter utilizado para la duracion del golpe para la animacion de la van
     private int dy;
@@ -115,7 +116,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         damageTempo = 50;
         counterCactus = 80;
         damageZombie = 11;
-        numCactusNivel = 15;
+        numCactusNivel = 50;
+        scoreJugador   = 0;
         Selva = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/selva.png"));
         Ciudad = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/ciudad.png"));
         Desierto = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/desierto.png"));
@@ -238,7 +240,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
               cac.setPosY(cac.getPosY()+5);
             }          
 
-            if(counterCactus > 300 && numCactusNivel>0){ 
+            if(counterCactus > 100 && numCactusNivel>0){ 
                 int posrX = 206 + (int) (Math.random() * this.getWidth()/2);    //cactus aparecen en lugares random en la orilla de arriba
                 int posrY = -2;
                 cactusObj = new Mutante(posrX, posrY, imCactus, velocidadCalle, 1);
@@ -366,11 +368,11 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 if(cac.intersecta(mut)){
                     mutantes.remove(mut);
                     restos.push(new Mutante(mut.getPosX(),mut.getPosY(),sangre,0,0));
+                    scoreJugador++;
                     break;
                 }
             }
             if (cac.intersecta(camion)){
-
                 vidaJugador-=cac.getDamage();
                 damageTempo = 0;
                 cac.setDamage(0);
@@ -428,13 +430,12 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         }
         else{
             if (e.getKeyCode() == KeyEvent.VK_S){
-                velocidadCalle = 13;
                 if (camionVx != 0){
-                    camionVy = 2;
+                    camionVy = 6;
                     camionVx -= camionVx;
                 }
                 else{
-                    camionVy = 4;
+                    camionVy = 6;
                 }
             }
         }
@@ -544,7 +545,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     g.setFont(new Font("default", Font.BOLD, 20));
                     g.drawString(nombreJugador , 2, 70);                    
                     g.setFont(new Font("default", Font.BOLD, 20));
-                    g.drawString(""+ vidaJugador, 2, 120);
+                    g.drawString( "" + vidaJugador, 2, 120);
+                    g.setFont(new Font("default", Font.BOLD, 50));
+                    g.drawString( "" + scoreJugador, 710, 110);
 
                     if(damageTempo<50){
                         g.drawImage(carHit, camion.getPosX(), camion.getPosY(), this);
