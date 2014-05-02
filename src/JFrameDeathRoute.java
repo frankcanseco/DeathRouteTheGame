@@ -115,7 +115,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         damageTempo = 50;
         counterCactus = 80;
         damageZombie = 11;
-        numCactusNivel = 5;
+        numCactusNivel = 15;
         Selva = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/selva.png"));
         Ciudad = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/ciudad.png"));
         Desierto = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/desierto.png"));
@@ -235,11 +235,11 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             camion.setPosY(camion.getPosY()+camionVy);
 
             for (Mutante cac:cactus){
-              cac.setPosY(cac.getPosY()+1);
+              cac.setPosY(cac.getPosY()+5);
             }          
 
             if(counterCactus > 300 && numCactusNivel>0){ 
-                int posrX = 206 + (int) (Math.random() * 594);    //cactus aparecen en lugares random en la orilla de arriba
+                int posrX = 206 + (int) (Math.random() * this.getWidth()/2);    //cactus aparecen en lugares random en la orilla de arriba
                 int posrY = -2;
                 cactusObj = new Mutante(posrX, posrY, imCactus, velocidadCalle, 1);
                 cactus.add(cactusObj);
@@ -270,7 +270,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                         entradaMut = this.getWidth();
                     }
                     entradaMutY = (int) (Math.random()*(this.getHeight() - 150) + 150);
-                    mutantes.push(new Mutante(entradaMut,entradaMutY,im2,2, damageZombie));
+                    mutantes.push(new Mutante(entradaMut,entradaMutY,im2, 3, damageZombie));
                     tiempoZombie = System.currentTimeMillis();
                 }
             }
@@ -370,6 +370,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 }
             }
             if (cac.intersecta(camion)){
+
                 vidaJugador-=cac.getDamage();
                 damageTempo = 0;
                 cac.setDamage(0);
