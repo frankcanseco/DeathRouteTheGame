@@ -44,7 +44,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private LinkedList<Mutante> mutantes; //objetos mutantes enemigos
     private LinkedList<Mutante> restos; //objetos restos
     private LinkedList<Mutante> cactus;
-    private Mutante toolbox; // objetos items
+    private LinkedList<Mutante> toolbox;
+    private Mutante toolboxObj; // objetos items
     private Mutante bubbles;
     private Mutante cactusObj;
     private Fondo carretera;//objeto carretera
@@ -90,6 +91,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private int vidaJugador;    //vida del jugador, empieza en 100 y va reduciendo por el damageZombie
     private int damageZombie;   //valor que representa el damage que quita el zombie
     private int counterCactus;
+    private int counterToolbox;
     private long tiempoActual;
     private long tiempoZombie;
     private boolean guardar;
@@ -98,6 +100,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private String nombreJugador;
     private Vector vec;    // Objeto vector para agregar el puntaje.
     private int numCactusNivel; // numero de cactus por nivel
+    private int numToolboxNivel; // numero de toolbox por nivel
 
     public JFrameDeathRoute(){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -115,8 +118,10 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         vidaJugador = 100;
         damageTempo = 50;
         counterCactus = 80;
+        counterToolbox = 80;
         damageZombie = 11;
         numCactusNivel = 50;
+        numToolboxNivel = 40;
         scoreJugador   = 0;
         Selva = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/selva.png"));
         Ciudad = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/ciudad.png"));
@@ -139,7 +144,6 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         imBubbles = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/burbujas.gif"));
         imCactus = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/cactus.png"));
         camion = new Jugador((int) (this.getWidth()/2),(int)((this.getHeight()/2)),cam);//se inicializan los objetos
-        toolbox = new Mutante((int) (this.getWidth()/2),(int)((this.getHeight()/2)),imToolbox, velocidadCalle, 0);
         bubbles = new Mutante((int) (this.getWidth()/2),(int)((this.getHeight()/2)),imBubbles, velocidadCalle, 0);
         carretera = new Fondo(206, 0, Calle);
         carretera2 = new Fondo(206, -820, Calle);
@@ -156,6 +160,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         mutantes = new LinkedList();
         restos = new LinkedList();
         cactus = new LinkedList(); 
+        toolbox = new LinkedList();
+        toolbox = new LinkedList();
         this.setBackground(Color.BLACK);
         nombreArchivo = "Puntaje.txt";
         nombreArchivoJugador = "UltimoJugador.txt";
@@ -199,6 +205,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             checaColision();
             damageTempo += 1;
             counterCactus += 1;
+            counterToolbox += 1;
             // Se actualiza el <code>Applet</code> repintando el contenido.
             repaint();
             if (guardar) {
@@ -240,6 +247,10 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
               cac.setPosY(cac.getPosY()+5);
             }          
 
+            for(Mutante tool:toolbox){
+                tool.setPosY(tool.getPosY()+6);
+            }
+
             if(counterCactus > 100 && numCactusNivel>0){ 
                 int posrX = 206 + (int) (Math.random() * this.getWidth()/2);    //cactus aparecen en lugares random en la orilla de arriba
                 int posrY = -2;
@@ -247,6 +258,15 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 cactus.add(cactusObj);
                 counterCactus = 0;
                 numCactusNivel--;
+            }
+
+            if(counterToolbox > 100 && numToolboxNivel>0){ 
+                int posrX = 206 + (int) (Math.random() * this.getWidth()/2);    //toolbox aparecen en lugares random en la orilla de arriba
+                int posrY = -2;
+                toolboxObj = new Mutante(posrX, posrY, imToolbox, velocidadCalle, 6);
+                toolbox.add(toolboxObj);
+                counterToolbox = 0;
+                numToolboxNivel--;
             }
             
             for (Mutante mut:mutantes){
@@ -377,6 +397,15 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 damageTempo = 0;
                 cac.setDamage(0);
                 camion.setPosY(camion.getPosY()+5);
+                break;
+            }
+        }
+
+        for(Mutante tool:toolbox){
+            if(tool.intersecta(camion)){
+                vidaJugador+=tool.getDamage();
+                tool.setDamage(0);
+                toolbox.remove(tool);
                 break;
             }
         }
@@ -539,6 +568,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     g.drawImage(carretera2.getImagenI(), carretera2.getPosX(), carretera2.getPosY(), this);
                     for (Mutante cac:cactus){
                         g.drawImage(cac.getImagenI(), cac.getPosX(), cac.getPosY(), this);
+                    }
+                    for (Mutante tool:toolbox){
+                        g.drawImage(tool.getImagenI(), tool.getPosX(), tool.getPosY(), this);
                     }
                     g.drawImage(bar, 0, 20, this);
                     g.setColor(Color.white);
