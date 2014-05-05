@@ -272,7 +272,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                         entradaMut = this.getWidth();
                     }
                     entradaMutY = (int) (Math.random()*(this.getHeight() - 150) + 150);
-                    mutantes.push(new Mutante(entradaMut,entradaMutY,im2, 3, damageZombie));
+                    mutantes.push(new Mutante(entradaMut,entradaMutY,im2,3, damageZombie));
                     tiempoZombie = System.currentTimeMillis();
                 }
             }
@@ -474,6 +474,12 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     }
 
                 }
+                if (e.getPoint().getY() >= 300 && e.getPoint().getY() <= 400) {
+                    ventana = 3;
+                }
+                if (e.getPoint().getY() >= 455 && e.getPoint().getY() <= 550) {
+                    ventana = 4;
+                }
                 if (e.getPoint().getY()>= 600 && e.getPoint().getY() <= 700){
                     ventana = 5;
                 }
@@ -519,6 +525,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     g.setFont(new Font("default", Font.BOLD, 20));
                     g.drawString("Playing as: " + nombreJugador,270,280);
                     break;
+                   
                     
                 case 2:
                     if (cambio < 11){
@@ -562,6 +569,20 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     for (Mutante res:restos) {
                         g.drawImage(res.getImagenI(), res.getPosX(), res.getPosY(), this);
                     }
+                    break;
+                    
+                case 3:
+                    g.setColor(Color.white);
+                    g.setFont(new Font("default", Font.BOLD, 20));
+                    g.drawString("Agregar imagen con instrucciones",100,100);
+                    g.drawString("Agregar boton para regresar a menu",100,150);
+                    break;
+                    
+                case 4:
+                    g.setColor(Color.white);
+                    g.setFont(new Font("default", Font.BOLD, 20));
+                    g.drawString("Agregar imagen con instrucciones",100,100);
+                    g.drawString("Agregar boton para regresar a menu",100,150);
                     break;
                     
                 case 5:
