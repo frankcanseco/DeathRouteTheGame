@@ -14,7 +14,7 @@
 public class Puntaje {
 
     private String nombre; //Guarda el nombre del jugador
-    private int puntaje; //Guarda el valor de score
+    private int puntos; //Guarda el valor de score
     private int posXCarro; //Guarda la posX del carro
     private int posXPopo; //Guarda la posX del proyectil
     private int posYPopo; //Guarda la posY del proyectil
@@ -30,7 +30,7 @@ public class Puntaje {
      */
     public Puntaje() {
         nombre = "";
-        puntaje = 0;
+        puntos = 0;
   /*      posXCarro = 0;
         posXPopo = 0;
         posYPopo = 0;
@@ -57,7 +57,7 @@ public class Puntaje {
                                             int perdidas, int sonActiv*/) {
         //Asigna los valores de los parametros al objeto Puntaje
         this.nombre = nom;
-        this.puntaje = puntaje;
+        this.puntos = puntaje;
     /*    this.posXCarro = posXCarro;
         this.posXPopo = posXPopo;
         this.posYPopo = posYPopo;
@@ -237,8 +237,8 @@ public class Puntaje {
      *
      * @param puntaje es el <code>puntaje</code> del objeto.
      */
-    public void setPuntaje(int puntaje) {
-        this.puntaje = puntaje;
+    public void setPuntos(int puntaje) {
+        this.puntos = puntaje;
     }
 
     /**
@@ -246,8 +246,8 @@ public class Puntaje {
      *
      * @return puntaje es el <code>puntaje</code> del objeto.
      */
-    public int getPuntaje() {
-        return puntaje;
+    public int getPuntos() {
+        return puntos;
     }
 
     /**
@@ -256,7 +256,7 @@ public class Puntaje {
      * @return un objeto de la clase <code>String</code>.
      */
     public String toString() {
-        return "" +getNombre() + "" + getPuntaje();/* + "," + getposXCarro() + ","
+        return "" +getNombre() + "" + getPuntos();/* + "," + getposXCarro() + ","
                 + getposXPopo() + "," + getposYPopo() + ","
                 + getvelXPopo() + "," + getvelYPopo() + ","
                 + getVidas() + "," +  getPerdidas() + ","

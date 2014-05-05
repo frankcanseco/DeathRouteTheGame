@@ -97,7 +97,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private long tiempoActual;
     private long tiempoZombie;
     private boolean guardar;
-    private String nombreArchivo;    //Nombre del archivo.
+    private String nombreArchivoHighscores;    //Nombre del archivo.
     private String nombreArchivoJugador;
     private String nombreJugador;
     private Vector vec;    // Objeto vector para agregar el puntaje.
@@ -118,7 +118,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         camionVx =0;
         camionVy = 0;
         velocidadCalle = 15;
-        vidaJugador = 100;
+        vidaJugador = 10;
         damageTempo = 50;
         counterCactus = 80;
         counterToolbox = 40;
@@ -168,7 +168,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         toolbox = new LinkedList();
         acid = new LinkedList();
         this.setBackground(Color.BLACK);
-        nombreArchivo = "Puntaje.txt";
+        nombreArchivoHighscores = "Puntaje.txt";
         nombreArchivoJugador = "UltimoJugador.txt";
         vec = new Vector();
         addKeyListener(this);   
@@ -205,13 +205,22 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     public void run() {
         
         while (true) {
-           
-            actualiza();
-            checaColision();
-            damageTempo += 1;
-            counterCactus += 1;
-            counterToolbox += 1;
-            counterAcid += 1;
+            if (vidaJugador > 0) {
+                actualiza();
+                checaColision();
+                damageTempo += 1;
+                counterCactus += 1;
+                counterToolbox += 1;
+                counterAcid += 1;
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "1. -"
+                                + "2. -"
+                                + "3. -"
+                                + "4. -","Highscores",
+                        JOptionPane.PLAIN_MESSAGE);
+                reiniciarJuego();
+            }
             // Se actualiza el <code>Applet</code> repintando el contenido.
             repaint();
             if (guardar) {
@@ -224,7 +233,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     vec.removeAllElements();
                     //vec.add(new Puntaje());
                     //Graba el vector en el archivo.
-                    grabaArchivo();
+                    grabaArchivoHighscores();
                 } catch (IOException ex) {
 
                     System.out.println("Error en " + ex.toString());
@@ -655,8 +664,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         }
     }
    
-    public void grabaArchivo() throws IOException {
-        PrintWriter fileOut = new PrintWriter(new FileWriter(nombreArchivo));
+    public void grabaArchivoHighscores() throws IOException {
+        PrintWriter fileOut = new PrintWriter(new FileWriter(nombreArchivoHighscores));
         for (int i = 0; i < vec.size(); i++) {
             Puntaje x;
             x = (Puntaje) vec.get(i);
@@ -664,7 +673,21 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         }
         fileOut.close();
     }
-    
+    public void cargarArchivoHighscores() throws IOException {
+        BufferedReader fileIn;
+        try {
+            fileIn = new BufferedReader(new FileReader(nombreArchivoHighscores));
+        } catch (FileNotFoundException e) {
+            File nombreJug = new File(nombreArchivoJugador);
+            PrintWriter fileOut = new PrintWriter(nombreJug);
+            fileOut.println("N/A");
+            fileOut.close();
+            fileIn = new BufferedReader(new FileReader(nombreArchivoJugador));
+        }
+        nombreJugador = fileIn.readLine();
+
+        fileIn.close();
+    }
     public void grabaArchivoNombre() throws IOException {
         PrintWriter fileOut = new PrintWriter(new FileWriter(nombreArchivoJugador));
         fileOut.println(nombreJugador);
@@ -686,6 +709,32 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
 
         fileIn.close();
     }
+
+    private void reiniciarJuego() {
+        ventana = 1;
+        vidaJugador = 10;
+        cambio = 1;
+        camionVx =0;
+        camionVy = 0;
+        velocidadCalle = 15;
+        damageTempo = 50;
+        counterCactus = 80;
+        counterToolbox = 40;
+        counterAcid = 80;
+        damageZombie = 11;
+        numCactusNivel = 50;
+        numToolboxNivel = 40;
+        numAcidNivel = 30;
+        scoreJugador   = 0;
+        mutantes.clear();
+        restos.clear();
+        cactus.clear(); 
+        toolbox.clear();
+        acid.clear();
+        camion.setPosX(getWidth()/2);
+        camion.setPosY(getHeight()/2);
+    }
+    
 
     
 }
