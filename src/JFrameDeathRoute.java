@@ -136,7 +136,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         counterToolbox = 40;
         counterAcid = 0;
         numInventory = 0;
-        damageZombie = 11;
+        damageZombie = 33;
         numCactusNivel = 50;
         numToolboxNivel = 40;
         numAcidNivel = 30;
@@ -357,7 +357,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 tiempoZombie = System.currentTimeMillis();
             }
             if (cambio%10<4){
-                if (System.currentTimeMillis()-tiempoZombie >= 60000/6){
+                if (System.currentTimeMillis()-tiempoZombie >= 60000/18){
                     if (Math.random()>= .5){
                         entradaMut = -30;
                     }
@@ -372,7 +372,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             }
             else{
                 if(cambio%10<8){
-                   if (System.currentTimeMillis()-tiempoZombie >= 60000/9){
+                   if (System.currentTimeMillis()-tiempoZombie >= 60000/27){
                     if (Math.random()>= .5){
                         entradaMut = -30;
                     }
@@ -385,7 +385,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     }
                 }
                 else{
-                    if (System.currentTimeMillis()-tiempoZombie >= 60000/12){
+                    if (System.currentTimeMillis()-tiempoZombie >= 60000/36){
                     if (Math.random()>= .5){
                         entradaMut = -30;
                     }
