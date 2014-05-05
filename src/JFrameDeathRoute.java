@@ -321,6 +321,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             }
 
             if(lanzaAcido && numInventory>0){
+                lanzaAcido = false;
                 numInventory--;
                 int posaX;
                 int posaY;
@@ -336,8 +337,6 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     posaX = camion.getPosX();
                     posaY = camion.getPosY()+60;
                 }
-
-                lanzaAcido = false;
                 acidItemObj = new Mutante(posaX, posaY, imBubbles, velocidadCalle, 0);
                 acidItem.add(acidItemObj);
             }
@@ -580,6 +579,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
          if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_S){
              camionVy = 0;
          }
+         lanzaAcido = false;
     }
 
     public void mouseClicked(MouseEvent e) {
