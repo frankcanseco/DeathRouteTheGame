@@ -129,7 +129,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         cambio = 1;
         camionVx =0;
         camionVy = 0;
-        velocidadCalle = 15;
+        velocidadCalle = 9;
         vidaJugador = 100;
         damageTempo = 50;
         counterCactus = 80;
@@ -277,19 +277,19 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             camion.setPosY(camion.getPosY()+camionVy);
 
             for (Mutante cac:cactus){
-              cac.setPosY(cac.getPosY()+5);
+              cac.setPosY(cac.getPosY()+velocidadCalle);
             }          
 
             for(Mutante tool:toolbox){
-                tool.setPosY(tool.getPosY()+6);
+                tool.setPosY(tool.getPosY()+velocidadCalle);
             }
 
             for(Mutante ac:acid){
-                ac.setPosY(ac.getPosY()+5);
+                ac.setPosY(ac.getPosY()+velocidadCalle);
             }
 
-            for(Mutante ai:acidItem){
-                ai.setPosY(ai.getPosY()+5);
+            for(Mutante ai:acidItem){ //acido cuando ya se lanza el acido
+                ai.setPosY(ai.getPosY()+velocidadCalle);
             }
             /*
             if(counterCactus > 100 && numCactusNivel>0){ 
@@ -321,6 +321,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             }
 
             if(lanzaAcido && numInventory>0){
+                lanzaAcido = false;
                 numInventory--;
                 int posaX;
                 int posaY;
@@ -336,8 +337,6 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     posaX = camion.getPosX();
                     posaY = camion.getPosY()+60;
                 }
-
-                lanzaAcido = false;
                 acidItemObj = new Mutante(posaX, posaY, imBubbles, velocidadCalle, 0);
                 acidItem.add(acidItemObj);
             }
@@ -467,7 +466,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 if(cac.intersecta(mut)){
                     mutantes.remove(mut);
                     restos.push(new Mutante(mut.getPosX(),mut.getPosY(),sangre,0,0));
-                    scoreJugador++;
+                    scoreJugador+=28;
                     break;
                 }
             }
@@ -502,7 +501,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 if(ai.intersecta(mut)){
                     mutantes.remove(mut);
                     restos.push(new Mutante(mut.getPosX(),mut.getPosY(),sangre,0,0));
-                    scoreJugador++;
+                    scoreJugador+=19;
                     break;
                 }
             }
@@ -579,8 +578,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
          }
          if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_S){
              camionVy = 0;
-             velocidadCalle = 15;
          }
+         lanzaAcido = false;
     }
 
     public void mouseClicked(MouseEvent e) {
@@ -731,7 +730,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     g.drawString(""+scoreJugador,700, 110);
                     g.setFont(new Font("default", Font.BOLD, 20));
                     g.setColor(Color.green);
-                    g.drawString(""+nombreJugador,42, 70);
+                    g.drawString(""+nombreJugador,40, 70);
                     g.setColor(Color.yellow);
                     g.drawString("Mile "+cambio,370, 100);
                     g.setColor(Color.red);
