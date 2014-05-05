@@ -3,6 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
+            <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/JFrameDeathRoute.java</file>
+=======
 <<<<<<< Updated upstream
             <file>file:/Users/Henry/NetBeansProjects/DeathRouteTheGame/src/DeathRoute.java</file>
             <file>file:/Users/Henry/NetBeansProjects/DeathRouteTheGame/src/JFrameDeathRoute.java</file>
@@ -10,6 +13,7 @@
             <file>file:/Users/roelcastano/Desktop/Programas/Java/DeathRouteTheGame/src/DeathRoute.java</file>
             <file>file:/Users/roelcastano/Desktop/Programas/Java/DeathRouteTheGame/src/JFrameDeathRoute.java</file>
 >>>>>>> Stashed changes
+>>>>>>> 619e6a6122307880c982ae974447a89be3170a93
         </group>
     </open-files>
 </project-private>
