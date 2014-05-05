@@ -188,8 +188,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         vec = new Vector();
         addKeyListener(this);   
         addMouseListener(this);
-        cactus.push(new Mutante(206-60, 0, imCactus, velocidadCalle, 1));
-        cactus.push(new Mutante(206-60, -410, imCactus, velocidadCalle, 1));
+        cactus.push(new Mutante(206-30, 0, imCactus, velocidadCalle, 1));
+        cactus.push(new Mutante(206-30, -410, imCactus, velocidadCalle, 1));
         cactus.push(new Mutante(594, 0, imCactus, velocidadCalle, 1));
         cactus.push(new Mutante(594,-410, imCactus, velocidadCalle, 1));
         try {
@@ -358,7 +358,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 tiempoZombie = System.currentTimeMillis();
             }
             if (cambio%10<4){
-                if (System.currentTimeMillis()-tiempoZombie >= 60000/6){
+                if (System.currentTimeMillis()-tiempoZombie >= 60000/18){
                     if (Math.random()>= .5){
                         entradaMut = -30;
                     }
@@ -373,7 +373,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             }
             else{
                 if(cambio%10<8){
-                   if (System.currentTimeMillis()-tiempoZombie >= 60000/9){
+                   if (System.currentTimeMillis()-tiempoZombie >= 60000/27){
                     if (Math.random()>= .5){
                         entradaMut = -30;
                     }
@@ -386,7 +386,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     }
                 }
                 else{
-                    if (System.currentTimeMillis()-tiempoZombie >= 60000/12){
+                    if (System.currentTimeMillis()-tiempoZombie >= 60000/36){
                     if (Math.random()>= .5){
                         entradaMut = -30;
                     }
