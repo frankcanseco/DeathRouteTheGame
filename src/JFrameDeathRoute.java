@@ -431,11 +431,11 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         else{
             if (e.getKeyCode() == KeyEvent.VK_S){
                 if (camionVx != 0){
-                    camionVy = 6;
+                    camionVy = 5;
                     camionVx -= camionVx;
                 }
                 else{
-                    camionVy = 6;
+                    camionVy = 5;
                 }
             }
         }
