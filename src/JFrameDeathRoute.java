@@ -727,7 +727,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     
                     g.setColor(Color.white);
                     g.setFont(new Font("default", Font.BOLD, 50));
-                    g.drawString(""+scoreJugador,700, 110);
+                    g.drawString(""+scoreJugador,690, 110);
                     g.setFont(new Font("default", Font.BOLD, 20));
                     g.setColor(Color.green);
                     g.drawString(""+nombreJugador,40, 70);
