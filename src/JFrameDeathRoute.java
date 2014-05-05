@@ -93,6 +93,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private int damageZombie;   //valor que representa el damage que quita el zombie
     private int counterCactus;
     private int counterToolbox;
+    private int counterAcid;
     private long tiempoActual;
     private long tiempoZombie;
     private boolean guardar;
@@ -102,6 +103,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private Vector vec;    // Objeto vector para agregar el puntaje.
     private int numCactusNivel; // numero de cactus por nivel
     private int numToolboxNivel; // numero de toolbox por nivel
+    private int numAcidNivel; // numero de acid por nivel
 
     public JFrameDeathRoute(){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -119,10 +121,12 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         vidaJugador = 100;
         damageTempo = 50;
         counterCactus = 80;
-        counterToolbox = 80;
+        counterToolbox = 40;
+        counterAcid = 80;
         damageZombie = 11;
         numCactusNivel = 50;
         numToolboxNivel = 40;
+        numAcidNivel = 30;
         scoreJugador   = 0;
         Selva = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/selva.png"));
         Ciudad = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/ciudad.png"));
@@ -162,7 +166,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         restos = new LinkedList();
         cactus = new LinkedList(); 
         toolbox = new LinkedList();
-        toolbox = new LinkedList();
+        acid = new LinkedList();
         this.setBackground(Color.BLACK);
         nombreArchivo = "Puntaje.txt";
         nombreArchivoJugador = "UltimoJugador.txt";
@@ -207,6 +211,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             damageTempo += 1;
             counterCactus += 1;
             counterToolbox += 1;
+            counterAcid += 1;
             // Se actualiza el <code>Applet</code> repintando el contenido.
             repaint();
             if (guardar) {
@@ -252,6 +257,12 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 tool.setPosY(tool.getPosY()+6);
             }
 
+            for(Mutante ac:acid){
+                ac.setPosY(ac.getPosY()+5);
+            }
+
+
+
             if(counterCactus > 100 && numCactusNivel>0){ 
                 int posrX = 206 + (int) (Math.random() * this.getWidth()/2);    //cactus aparecen en lugares random en la orilla de arriba
                 int posrY = -2;
@@ -261,13 +272,22 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 numCactusNivel--;
             }
 
-            if(counterToolbox > 100 && numToolboxNivel>0){ 
+            if(counterToolbox > 110 && numToolboxNivel>0){ 
                 int posrX = 206 + (int) (Math.random() * this.getWidth()/2);    //toolbox aparecen en lugares random en la orilla de arriba
                 int posrY = -2;
                 toolboxObj = new Mutante(posrX, posrY, imToolbox, velocidadCalle, 6);
                 toolbox.add(toolboxObj);
                 counterToolbox = 0;
                 numToolboxNivel--;
+            }
+
+            if(counterAcid > 100 && numAcidNivel>0){ 
+                int posrX = 206 + (int) (Math.random() * this.getWidth()/2);    //acidos aparecen en lugares random en la orilla de arriba
+                int posrY = -2;
+                acidObj = new Mutante(posrX, posrY, imBubbles, velocidadCalle, 0);
+                acid.add(acidObj);
+                counterAcid = 0;
+                numAcidNivel--;
             }
             
             for (Mutante mut:mutantes){
@@ -408,6 +428,12 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 tool.setDamage(0);
                 toolbox.remove(tool);
                 break;
+            }
+        }
+
+        for(Mutante ac:acid){
+            if(ac.intersecta(camion)){
+                //agregar al inventorio, quitar acid de la pantalla
             }
         }
 
