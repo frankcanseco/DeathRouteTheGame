@@ -670,8 +670,10 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                             g.drawImage(selva2.getImagenI(), selva2.getPosX(), selva2.getPosY(), this);
                         }
                     }
+                    
                     g.drawImage(carretera.getImagenI(), carretera.getPosX(), carretera.getPosY(), this);
                     g.drawImage(carretera2.getImagenI(), carretera2.getPosX(), carretera2.getPosY(), this);
+                    
                     for (Mutante cac:cactus){
                         g.drawImage(cac.getImagenI(), cac.getPosX(), cac.getPosY(), this);
                     }
@@ -685,11 +687,11 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                         g.drawImage(ai.getImagenI(), ai.getPosX(), ai.getPosY(), this);
                     }
 
-                    g.drawImage(bar, 0, 20, this);
-                    g.setColor(Color.white);
+                    
+                    //g.setColor(Color.white);
                     //g.drawString(nombreJugador , 2, 70);                    
                     //g.drawString( "" + vidaJugador, 2, 120);
-                    g.setFont(new Font("default", Font.BOLD, 50));
+                    //g.setFont(new Font("default", Font.BOLD, 50));
                     //g.drawString( "" + scoreJugador, 710, 110);
 
                     if(numInventory>0){
@@ -705,9 +707,10 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     else{
                         g.drawImage(camion.getImagenI(), camion.getPosX(), camion.getPosY(), this);    
                     }
-                    for (Mutante cac:cactus){
-                        g.drawImage(cac.getImagenI(), cac.getPosX(), cac.getPosY(), this);
-                    }
+//                    for (Mutante cac:cactus){
+//                        g.drawImage(cac.getImagenI(), cac.getPosX(), cac.getPosY(), this);
+//                    }
+                    g.drawImage(bar, 0, 20, this);
                     camionCenterX = (int) (camion.getPosX()+camion.getAncho()/2);
                     camionCenterY = (int) (camion.getPosY()+camion.getAlto()/2);
                     for (Mutante mut:mutantes){
@@ -722,11 +725,18 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     for (Mutante res:restos) {
                         g.drawImage(res.getImagenI(), res.getPosX(), res.getPosY(), this);
                     }
+                    
                     g.setColor(Color.white);
-                    g.drawString(""+scoreJugador,700, 80);
-                    g.drawString(""+vidaJugador+"%",10, 130);
-                    g.drawString(""+nombreJugador,10, 70);
-                    g.drawString("Mile"+cambio,350, 100);
+                    g.setFont(new Font("default", Font.BOLD, 50));
+                    g.drawString(""+scoreJugador,700, 110);
+                    g.setFont(new Font("default", Font.BOLD, 20));
+                    g.setColor(Color.green);
+                    g.drawString(""+nombreJugador,42, 70);
+                    g.setColor(Color.yellow);
+                    g.drawString("Mile "+cambio,370, 100);
+                    g.setColor(Color.red);
+                    g.setFont(new Font("default", Font.BOLD, 30));
+                    g.drawString(""+vidaJugador+"%", 30, 127);
                     break;
                     
                 case 3:
