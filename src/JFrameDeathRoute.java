@@ -188,7 +188,10 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         vec = new Vector();
         addKeyListener(this);   
         addMouseListener(this);
-
+        cactus.push(new Mutante(206-60, 0, imCactus, velocidadCalle, 1));
+        cactus.push(new Mutante(206-60, -410, imCactus, velocidadCalle, 1));
+        cactus.push(new Mutante(594, 0, imCactus, velocidadCalle, 1));
+        cactus.push(new Mutante(594,-410, imCactus, velocidadCalle, 1));
         try {
             cargarNombreJugador();
         } catch (IOException ex) {
@@ -288,7 +291,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             for(Mutante ai:acidItem){
                 ai.setPosY(ai.getPosY()+5);
             }
-
+            /*
             if(counterCactus > 100 && numCactusNivel>0){ 
                 int posrX = 206 + (int) (Math.random() * this.getWidth()/2);    //cactus aparecen en lugares random en la orilla de arriba
                 int posrY = -2;
@@ -297,6 +300,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 counterCactus = 0;
                 numCactusNivel--;
             }
+            */
 
             if(counterToolbox > 250 && numToolboxNivel>0){ 
                 int posrX = 206 + (int) (Math.random() * this.getWidth()/2);    //toolbox aparecen en lugares random en la orilla de arriba
@@ -444,7 +448,11 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 camion.setPosY(getHeight()-camion.getAlto());
             }
         }
-
+        for (Mutante cac:cactus){
+            if (cac.getPosY()>this.getHeight()){
+                cac.setPosY(0);
+            }
+        }
         for (Mutante cac:cactus) {
             for (Mutante mut:mutantes) {
                 if(mut.intersecta(camion)){
