@@ -371,14 +371,14 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 mut.setPosX(mut.getPosX()+dx);
                 mut.setPosY(mut.getPosY()+dy);
             }
-            if (System.currentTimeMillis()-tiempoActual >= 60000){
+            if (System.currentTimeMillis()-tiempoActual >= 30000){
                 cambio++;
                 scoreJugador+=100;
                 tiempoActual = System.currentTimeMillis();
                 tiempoZombie = System.currentTimeMillis();
             }
             if (cambio%10<4){
-                if (System.currentTimeMillis()-tiempoZombie >= 60000/18){
+                if (System.currentTimeMillis()-tiempoZombie >= 30000/9){
                     if (Math.random()>= .5){
                         entradaMut = -30;
                     }
@@ -393,7 +393,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             }
             else{
                 if(cambio%10<8){
-                   if (System.currentTimeMillis()-tiempoZombie >= 60000/27){
+                   if (System.currentTimeMillis()-tiempoZombie >= 30000/18){
                     if (Math.random()>= .5){
                         entradaMut = -30;
                     }
@@ -406,7 +406,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     }
                 }
                 else{
-                    if (System.currentTimeMillis()-tiempoZombie >= 60000/36){
+                    if (System.currentTimeMillis()-tiempoZombie >= 30000/27){
                     if (Math.random()>= .5){
                         entradaMut = -30;
                     }
