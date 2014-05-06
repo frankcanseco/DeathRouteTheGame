@@ -256,7 +256,7 @@ public class Puntaje {
      * @return un objeto de la clase <code>String</code>.
      */
     public String toString() {
-        return "" +getNombre() + "" + getPuntos();/* + "," + getposXCarro() + ","
+        return "" +getNombre() + "," + getPuntos();/* + "," + getposXCarro() + ","
                 + getposXPopo() + "," + getposYPopo() + ","
                 + getvelXPopo() + "," + getvelYPopo() + ","
                 + getVidas() + "," +  getPerdidas() + ","
