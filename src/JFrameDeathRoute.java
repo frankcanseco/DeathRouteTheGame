@@ -126,7 +126,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
 
     public void init(){
         ventana = 1;//se inicializa con menu
-        cambio = 1;
+        cambio = 8;
         camionVx =0;
         camionVy = 0;
         velocidadCalle = 9;
