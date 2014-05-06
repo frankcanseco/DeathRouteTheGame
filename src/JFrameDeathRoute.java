@@ -116,6 +116,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private int numCactusNivel; // numero de cactus por nivel
     private int numToolboxNivel; // numero de toolbox por nivel
     private int numAcidNivel; // numero de acid por nivel
+    private int velocidadCactus;
 
     public JFrameDeathRoute(){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -126,7 +127,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
 
     public void init(){
         ventana = 1;//se inicializa con menu
-        cambio = 8;
+        cambio = 1;
         camionVx =0;
         camionVy = 0;
         velocidadCalle = 9;
@@ -188,10 +189,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         vec = new Vector();
         addKeyListener(this);   
         addMouseListener(this);
-        cactus.push(new Mutante(206-30, 0, imCactus, velocidadCalle, 1));
-        cactus.push(new Mutante(206-30, -410, imCactus, velocidadCalle, 1));
-        cactus.push(new Mutante(594, 0, imCactus, velocidadCalle, 1));
-        cactus.push(new Mutante(594,-410, imCactus, velocidadCalle, 1));
+        velocidadCactus = 3;
+        cactus.push(new Mutante(206-30, 410, imCactus, velocidadCalle, 1));
+        cactus.push(new Mutante(594, 410, imCactus, velocidadCalle, 1));
         try {
             cargarNombreJugador();
         } catch (IOException ex) {
@@ -277,7 +277,38 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             camion.setPosY(camion.getPosY()+camionVy);
 
             for (Mutante cac:cactus){
-              cac.setPosY(cac.getPosY()+velocidadCalle);
+              if (camionVy == 0){
+              if((cac.getPosY()+cac.getAlto()/2)>(camion.getPosY()+camion.getAlto()/2)){
+                  velocidadCactus = -3;
+              }
+              else{
+                  if((cac.getPosY()+cac.getAlto()/2)<(camion.getPosY()+camion.getAlto()/2)){
+                     velocidadCactus = 3;
+                }
+              }
+              }
+              else{
+                  cac.setPosY(cac.getPosY()+velocidadCactus);
+              }
+              if (camionVy > 0 || camionVy < 0){
+                  if ((cac.getPosY()+cac.getAlto()/2)>(camion.getPosY()+camion.getAlto()/2)+150){
+                      velocidadCactus = -4;
+                  }
+                  if ((cac.getPosY()+cac.getAlto()/2)<(camion.getPosY()+camion.getAlto()/2)-150){
+                      velocidadCactus = 4;
+                  }
+                  if (velocidadCactus > 0){
+                      if ((cac.getPosY()+cac.getAlto()/2)>(camion.getPosY()+camion.getAlto()/2)-50){
+                      velocidadCactus = 2;
+                    }
+                  }
+                  if (velocidadCactus < 0){
+                      if ((cac.getPosY()+cac.getAlto()/2)<(camion.getPosY()+camion.getAlto()/2)+50){
+                      velocidadCactus = -2;
+                    }
+                  }
+                }
+              cac.setPosY(cac.getPosY()+velocidadCactus);
             }          
 
             for(Mutante tool:toolbox){
@@ -291,16 +322,6 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             for(Mutante ai:acidItem){ //acido cuando ya se lanza el acido
                 ai.setPosY(ai.getPosY()+velocidadCalle);
             }
-            /*
-            if(counterCactus > 100 && numCactusNivel>0){ 
-                int posrX = 206 + (int) (Math.random() * this.getWidth()/2);    //cactus aparecen en lugares random en la orilla de arriba
-                int posrY = -2;
-                cactusObj = new Mutante(posrX, posrY, imCactus, velocidadCalle, 1);
-                cactus.add(cactusObj);
-                counterCactus = 0;
-                numCactusNivel--;
-            }
-            */
 
             if(counterToolbox > 250 && numToolboxNivel>0){ 
                 int posrX = 206 + (int) (Math.random() * this.getWidth()/2);    //toolbox aparecen en lugares random en la orilla de arriba
@@ -448,8 +469,13 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             }
         }
         for (Mutante cac:cactus){
-            if (cac.getPosY()>this.getHeight()){
-                cac.setPosY(0);
+            if (cac.getPosY()+cac.getAlto()>this.getHeight()){
+                cac.setPosY(this.getHeight()-cac.getAlto());
+            }
+            else{
+                if (cac.getPosY()<140){
+                cac.setPosY(140);
+            }
             }
         }
         for (Mutante cac:cactus) {
