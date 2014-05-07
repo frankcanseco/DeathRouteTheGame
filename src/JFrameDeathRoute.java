@@ -107,6 +107,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private long tiempoActual;
     private long tiempoZombie;
     private boolean guardar;
+    private boolean pausa;
     private String nombreArchivoHighscores;    //Nombre del archivo.
     private boolean lanzaAcido;
     private String nombreArchivo;    //Nombre del archivo.
@@ -145,6 +146,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         numAcidNivel = 30;
         scoreJugador   = 0;
         lanzaAcido = false;
+        pausa = false;
         Selva = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/selva.png"));
         Ciudad = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/ciudad.png"));
         Desierto = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/desierto.png"));
@@ -225,14 +227,16 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     public void run() {
         
         while (true) {
-            if (vidaJugador > 0) {
+            if (vidaJugador > 0 && !pausa) {
                 actualiza();
                 checaColision();
                 damageTempo += 1;
                 counterCactus += 1;
                 counterToolbox += 1;
                 counterAcid += 1;
-            } else {
+            } 
+            
+            if (vidaJugador <= 0){
                 
                 try {
                     cargarArchivoHighscores();
@@ -615,6 +619,10 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
          if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_S){
              camionVy = 0;
          }
+         
+        if (e.getKeyCode() == KeyEvent.VK_P) {
+            pausa = !pausa;
+        }
          lanzaAcido = false;
     }
 
@@ -769,6 +777,11 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     g.drawString(""+nombreJugador,40, 70);
                     g.setColor(Color.yellow);
                     g.drawString("Mile "+cambio,370, 100);
+                    g.setColor(Color.red);
+                    g.setFont(new Font("default", Font.BOLD, 40));
+                    if(pausa){
+                        g.drawString("PAUSA",340, 70);
+                    }
                     g.setColor(Color.red);
                     g.setFont(new Font("default", Font.BOLD, 30));
                     g.drawString(""+vidaJugador+"%", 30, 127);
