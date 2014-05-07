@@ -3,26 +3,26 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/Users/roelcastano/Desktop/Programas/Java/DeathRouteTheGame/src/DeathRoute.java</file>
-            <file>file:/Users/roelcastano/Desktop/Programas/Java/DeathRouteTheGame/src/Puntaje.java</file>
-            <file>file:/Users/roelcastano/Desktop/Programas/Java/DeathRouteTheGame/src/JFrameDeathRoute.java</file>
-=======
-<<<<<<< HEAD
-            <file>file:/Users/Henry/NetBeansProjects/DeathRouteTheGame/src/DeathRoute.java</file>
-            <file>file:/Users/Henry/NetBeansProjects/DeathRouteTheGame/src/JFrameDeathRoute.java</file>
-=======
-            <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/images/zombieLeft.gif</file>
-            <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/Animacion.java</file>
-            <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/images/zombieRight.gif</file>
+            <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/images/zombieUpThunder.gif</file>
+            <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/images/vanElec.gif</file>
+            <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/images/hidrante.png</file>
             <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/JFrameDeathRoute.java</file>
+            <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/images/van.gif</file>
+            <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/images/zombieUpRojo.gif</file>
             <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/images/zombieDown.gif</file>
             <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/DeathRoute.java</file>
+            <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/images/stone.png</file>
             <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/images/credits.png</file>
+            <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/images/vanHit.gif</file>
+            <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/images/zombieLeft.gif</file>
+            <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/Animacion.java</file>
+            <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/images/zombieDownRojo.gif</file>
+            <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/images/zombieRight.gif</file>
+            <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/images/bar.png</file>
+            <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/images/bar2.png</file>
+            <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/images/toolbox.png</file>
             <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/images/zombieUp.gif</file>
             <file>file:/Users/pako_knc13/NetBeansProjects/DeathRouteTheGame/src/Mutante.java</file>
->>>>>>> af90dd27d18a12d0e7960471f6e10b49de7d1606
->>>>>>> e50eae6dc47735d0479530af17d96b1668f2c780
         </group>
     </open-files>
 </project-private>
