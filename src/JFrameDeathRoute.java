@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import java.util.Random;
 
 public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, MouseListener{
     
@@ -115,6 +116,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private boolean pausa;
     private String nombreArchivoHighscores;    //Nombre del archivo.
     private boolean lanzaAcido;
+    private boolean electro;
     private String nombreArchivo;    //Nombre del archivo.
     private String nombreArchivoJugador;
     private String nombreJugador;
@@ -125,6 +127,16 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private int numToolboxNivel; // numero de toolbox por nivel
     private int numAcidNivel; // numero de acid por nivel
     private int velocidadCactus;
+    private long tiempoElectro;
+    private long tiempoTecla;
+    private boolean teclear;
+    private int[] cambioElectro;
+    private Random rnd; 
+    private String teclaIntento;
+    private int intento;
+    private String abc;
+    private String[] password;
+    StringBuilder sb = new StringBuilder();
 
     public JFrameDeathRoute(){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -135,9 +147,14 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
 
     public void init(){
         movU = false;
+        abc = "YUIOHJKL";
+        password = new String[4];
         movR = false;
         movD = false;
         movL = false;
+        teclear =true;
+        rnd = new Random();
+        electro = true;
         ventana = 1;//se inicializa con menu
         cambio = 1;
         camionVx =0;
@@ -154,6 +171,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         numToolboxNivel = 40;
         numAcidNivel = 30;
         scoreJugador   = 0;
+        tiempoTecla=0;
         lanzaAcido = false;
         pausa = false;
         Selva = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/selva.png"));
@@ -203,6 +221,21 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         addKeyListener(this);   
         addMouseListener(this);
         velocidadCactus = 3;
+        //Esto ira en el zombie
+        tiempoElectro = 0;
+        cambioElectro = new int[2];
+        for (int i = 0 ; i < 2; i ++){
+            cambioElectro[i] = (rnd.nextInt(2));
+            cambioElectro[i] += cambioElectro[i]-1;
+        }
+        intento = 0;
+        teclaIntento = " ";
+        for (int i = 0; i < 4; i++) {
+            sb.append(abc.charAt(rnd.nextInt(abc.length())));
+            password[i]=sb.toString();
+            sb.deleteCharAt(0);
+            System.out.print(password[i]);
+        }
         cactus.push(new Mutante(206-30, 410, imCactus, velocidadCalle, 1));
         cactus.push(new Mutante(594, 410, imCactus, velocidadCalle, 1));
         try {
@@ -243,8 +276,11 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 counterCactus += 1;
                 counterToolbox += 1;
                 counterAcid += 1;
+                if (electro){
+                    tiempoElectro +=1;
+                    tiempoTecla+=1;
+                }
             } 
-            
             if (vidaJugador <= 0){
                 
                 try {
@@ -313,6 +349,29 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             if ((Math.abs(camionVx)+Math.abs(camionVy)) == 8){
                 camionVy -= camionVy/4;
                 camionVx -= camionVx/4;
+            }
+             if (electro == true){
+                 
+                 camionVy*=cambioElectro[0];
+                 camionVx*=cambioElectro[1];
+                 if(tiempoTecla >= 20){
+                     tiempoTecla = 0;
+                     teclear = true;
+                 }
+                 if (password[intento].equals(teclaIntento)){
+                     teclaIntento = " ";
+                     intento++;
+                     if (intento ==4){
+                     electro =false;
+                    }
+                 }
+                 if (tiempoElectro >= 250){
+                     for (int i = 0 ; i < 2; i ++){
+                        cambioElectro[i] = (rnd.nextInt(2));
+                         cambioElectro[i] += cambioElectro[i]-1;
+                     }
+                     tiempoElectro = 0;
+                 }
             }
             camion.setPosX(camion.getPosX()+camionVx);
             camion.setPosY(camion.getPosY()+camionVy);
@@ -621,6 +680,54 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         if(e.getKeyCode() == KeyEvent.VK_SPACE){
             lanzaAcido = true;
         }
+        if(e.getKeyCode() == KeyEvent.VK_Y){
+             if(teclear){
+                 teclaIntento = "Y";
+                 teclear = false;
+             }
+        }
+        if(e.getKeyCode() == KeyEvent.VK_U){
+             if(teclear){
+                 teclaIntento = "U";
+                 teclear = false;
+             }
+        }
+        if(e.getKeyCode() == KeyEvent.VK_I){
+             if(teclear){
+                 teclaIntento = "I";
+                 teclear = false;
+             }
+        }
+        if(e.getKeyCode() == KeyEvent.VK_O){
+             if(teclear){
+                 teclaIntento = "O";
+                 teclear = false;
+             }
+        }
+        if(e.getKeyCode() == KeyEvent.VK_H){
+             if(teclear){
+                 teclaIntento = "H";
+                 teclear = false;
+             }
+        }
+        if(e.getKeyCode() == KeyEvent.VK_J){
+             if(teclear){
+                 teclaIntento = "J";
+                 teclear = false;
+             }
+        }
+        if(e.getKeyCode() == KeyEvent.VK_K){
+             if(teclear){
+                 teclaIntento = "K";
+                 teclear = false;
+             }
+        }
+        if(e.getKeyCode() == KeyEvent.VK_L){
+             if(teclear){
+                 teclaIntento = "L";
+                 teclear = false;
+             }
+        }
     } 
 
     public void keyTyped(KeyEvent e) {
@@ -821,14 +928,28 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     g.setFont(new Font("default", Font.BOLD, 20));
                     g.setColor(Color.green);
                     g.drawString(""+nombreJugador,40, 70);
+                    if (electro){
+                        g.setColor(Color.CYAN);
+                        g.setFont(new Font("default", Font.BOLD, 80));
+                        for(int i = 0 ; i < 4 ; i++){
+                            g.drawString( "_",320+50 *i, 60);
+                        }
+                        g.setFont(new Font("default", Font.BOLD, 40));
+                        for(int i = 0 ; i < intento ; i++){
+                            g.drawString( password[i],325+52 *i, 60);
+                        }
+                        g.setColor(Color.red);
+                        g.drawString( teclaIntento ,325+52 *intento, 60);
+                    }
                     if(pausa){
                         g.setColor(Color.red);
                         g.setFont(new Font("default", Font.BOLD, 40));
                         g.drawString("Pause",340, 70);
                         g.drawString("Press 'Q' to Quit",235, 120);
                     } else {
-                        g.setColor(Color.yellow);
-                        g.drawString("Mile " + cambio, 370, 100);
+                        g.setFont(new Font("default", Font.BOLD, 40));
+                        g.setColor(Color.white);
+                        g.drawString("Mile " + cambio, 340, 120);
                     }
                     g.setColor(Color.red);
                     g.setFont(new Font("default", Font.BOLD, 30));
