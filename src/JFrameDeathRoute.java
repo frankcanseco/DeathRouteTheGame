@@ -881,6 +881,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         acidItem.clear();
         camion.setPosX(getWidth()/2);
         camion.setPosY(getHeight()/2);
+        
+        cactus.push(new Mutante(206-30, 410, imCactus, velocidadCalle, 1));
+        cactus.push(new Mutante(594, 410, imCactus, velocidadCalle, 1));
     }
     
 

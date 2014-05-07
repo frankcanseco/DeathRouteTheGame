@@ -1,6 +1,7 @@
 JOEL,306
 JOEL,168
 JOEL,112
+JOEL,56
 alguien,0
 alguien,0
 alguien,0
