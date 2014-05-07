@@ -161,7 +161,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private SoundClip heartbeat;    // Objeto SoundClip
     private SoundClip honk;    // Objeto SoundClip
     private SoundClip splash;    // Objeto SoundClip
-    private SoundClip splash2;    
+    private SoundClip splash2;
+    private SoundClip music1;    // Objeto SoundClip
+    private SoundClip music2;
     private int segundero;
     private int xCross;
     private int yCross;
@@ -245,6 +247,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         honk = new SoundClip("/sounds/honk.wav");
         splash = new SoundClip("/sounds/splash.wav");
         splash2 = new SoundClip("/sounds/splash2.wav");
+        music1 = new SoundClip("/sounds/music1.wav");
+        music2 = new SoundClip("/sounds/music2.wav");
         crossIm = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/crosshairB.png"));
         bulletIm = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/bullet.png"));
         bigZombie = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/zombiegrande.gif"));
@@ -1069,12 +1073,16 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
      */
     public void mouseClicked(MouseEvent e) {
         if (ventana == 1){
+            //music1.play();
             if(e.getPoint().getX()>= 270 && e.getPoint().getX() <= 560){
 
                 //boton para entrar al juego
                 if (e.getPoint().getY()>= 150 && e.getPoint().getY() <= 250){
+                    //music1.stop();
                     engine.setLooping(true);
                     engine.play();
+                    music2.setLooping(true);
+                    music2.play();
                     ventana = 2;
                     tiempoActual = System.currentTimeMillis();
                     tiempoZombie = System.currentTimeMillis();
