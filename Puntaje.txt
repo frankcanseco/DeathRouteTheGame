@@ -2,6 +2,7 @@ JOEL,306
 JOEL,168
 Kike,140
 JOEL,112
+JOEL,56
 alguien,0
 alguien,0
 alguien,0
