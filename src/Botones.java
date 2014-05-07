@@ -19,7 +19,7 @@ public class Botones extends Base{
      * Metodo constructor usado para crear el objeto Malo
      * @param posX es la <code>posicion en x</code> del objeto.
      * @param posY es la <code>posicion en y</code> del objeto.
-     * @param imagen es la <code>imagen<code> del boton.
+     * @param imagen es la <code>imagen</code> del boton.
      */
     public Botones(int posX, int posY, Image imagen) {
         super(posX,posY,imagen);

@@ -1,5 +1,40 @@
+<<<<<<< HEAD
 Kike,2322
 Frank,1056
+=======
+<<<<<<< HEAD
+Frank,3000
+=======
+Frank,721
+>>>>>>> a52c1b5b1cc9dc1ad829b0259b3ccda3d17dd277
+>>>>>>> 08ade6ead53ae45a5e72ab950535f062ff6673c5
+Kike,380
+Kike,343
+JOEL,306
+Frank,250
+Kike,240
+JOEL,168
+Kike,140
+JOEL,112
+Kike,112
+Frank,112
+<<<<<<< HEAD
+Frank,100
+=======
+Frank,112
+Frank,84
+JOEL,56
+Kike,28
+alguien,0
+alguien,0
+alguien,0
+alguien,0
+alguien,0
+alguien,0
+alguien,0
+alguien,0
+alguien,0
+alguien,0
 Kike,380
 Kike,343
 JOEL,306
@@ -9,6 +44,8 @@ Kike,140
 JOEL,112
 Kike,112
 Frank,112
+Frank,112
+>>>>>>> a52c1b5b1cc9dc1ad829b0259b3ccda3d17dd277
 Frank,84
 Frank,84
 JOEL,56
