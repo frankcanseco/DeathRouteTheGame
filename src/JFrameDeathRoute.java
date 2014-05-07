@@ -85,6 +85,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private Image im2;
     private Image im3;
     private Image im4;
+    private Image imInstrucciones;
     private Image Iplay;
     private Image Ioptions;
     private Image Icredits;
@@ -216,6 +217,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         lanzaAcido = false;
         pausa = false;
         electro = false;
+        imInstrucciones = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/SHIT.png"));
         vanE = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/vanElec.gif"));
         Selva = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/selva.png"));
         Ciudad = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/ciudad.png"));
@@ -1105,6 +1107,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 }
                 //ventana de instrucciones
                 if (e.getPoint().getY() >= 300 && e.getPoint().getY() <= 400) {
+
                     ventana = 3;
                 }
                 //ventana de opciones
@@ -1360,10 +1363,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                  * En esta ventana tienen las instrucciones del juego
                  */
                 case 3:
-                    g.setColor(Color.white);
-                    g.setFont(new Font("default", Font.BOLD, 20));
-                    g.drawString("Agregar imagen con instrucciones",100,100);
-                    g.drawString("Agregar boton para regresar a menu",100,150);
+                    g.drawImage(imInstrucciones, 30 , 30, this);
                     break;
                     
                 /**
