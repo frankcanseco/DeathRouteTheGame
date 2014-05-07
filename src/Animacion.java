@@ -76,8 +76,8 @@ public class Animacion {
 
     /**
      * Metodo de Animacion que regresa el cuadro especificado
-     * @param i es el <code>numero de cuadro<code> de la animacion
-     * @return cuadroDeAnimacion es el <code>cuadro de animacion<code> especificado
+     * @param i es el <code>numero de cuadro</code> de la animacion
+     * @return cuadroDeAnimacion es el <code>cuadro de animacion</code> especificado
      */
     private cuadroDeAnimacion getCuadro(int i) {
         return (cuadroDeAnimacion) cuadros.get(i);
@@ -99,8 +99,8 @@ public class Animacion {
 
         /**
          * Inicializa un cuadro de animacion con la imagen y el tiempoFinal
-         * @param imagen la <code>imagen<code> de la animacion
-         * @param tiempoFinal es el <code>tiempo final<code> de la animacion
+         * @param imagen la <code>imagen</code> de la animacion
+         * @param tiempoFinal es el <code>tiempo final</code> de la animacion
          */
         public cuadroDeAnimacion(Image imagen, long tiempoFinal) {
             this.imagen = imagen;
@@ -109,7 +109,7 @@ public class Animacion {
 
         /**
          * Regresa la imagen del cuadro
-         * @return imagen es la <code>imagen<code> de la animacion
+         * @return imagen es la <code>imagen</code> de la animacion
          */
         public Image getImagen() {
             return imagen;
@@ -117,7 +117,7 @@ public class Animacion {
 
         /**
          * Regresa el tiempo final del objecto
-         * @return tiempoFinal <code> tiempo final del cuadro<code>
+         * @return tiempoFinal <code> tiempo final del cuadro</code>
          */
         public long getTiempoFinal() {
             return tiempoFinal;
@@ -125,7 +125,7 @@ public class Animacion {
 
         /**
          * Usado para asignar imagen
-         * @param imagen  asigna la <code>imagen<code> del cuadro
+         * @param imagen  asigna la <code>imagen</code> del cuadro
          */
         public void setImagen(Image imagen) {
             this.imagen = imagen;
@@ -133,7 +133,7 @@ public class Animacion {
 
         /**
          * Usado para asignar tiempo final
-         * @param tiempoFinal asigna el <code>tiempo final<code> del cuadro
+         * @param tiempoFinal asigna el <code>tiempo final</code> del cuadro
          */
         public void setTiempoFinal(long tiempoFinal) {
             this.tiempoFinal = tiempoFinal;

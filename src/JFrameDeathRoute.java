@@ -932,6 +932,10 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         g.drawImage(dbImage, 0, 0, this);
     }
     
+    /**
+     * Metodo que responde al ser presionadas las teclas.
+     * @param e 
+     */
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_W){
              movU = true;
@@ -1001,7 +1005,14 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     public void keyTyped(KeyEvent e) {
     }
 
+    /**
+     * Metodo donde se responde al teclado
+     * @param e 
+     */
     public void keyReleased(KeyEvent e) {
+        /**
+         * Metodos para el movimiento del carro
+         */
        if(e.getKeyCode() == KeyEvent.VK_W){
              movU = false;
         }
@@ -1014,19 +1025,24 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         if(e.getKeyCode() == KeyEvent.VK_A){
              movL = false;
         }
+        //Se reinicia el juego si el jugador presiona "Q"
         if (e.getKeyCode() == KeyEvent.VK_Q && pausa){
             reiniciarJuego();
         }
+        //Se cambia el valor de pausa.
         if (e.getKeyCode() == KeyEvent.VK_P) {
             pausa = !pausa;
         }
-        
-        lanzaAcido = false;
     }
 
+    /**
+     * En este metodo es donde se le da funcionalidad a los botones
+     * @param e es el <code>click</code> del boton.
+     */
     public void mouseClicked(MouseEvent e) {
-        if (ventana == 1){//Funcion para el cambio de ventanas en el menu
+        if (ventana == 1){
             if(e.getPoint().getX()>= 270 && e.getPoint().getX() <= 560){
+                //boton para entrar al juego
                 if (e.getPoint().getY()>= 150 && e.getPoint().getY() <= 250){
                     ventana = 2;
                     tiempoActual = System.currentTimeMillis();
@@ -1034,6 +1050,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     tiempoZombieR = System.currentTimeMillis();
                     tiempoZombieE = System.currentTimeMillis();
                 }
+                
+                //boton para cambiar de juego
                 if (e.getPoint().getY() >= 255 && e.getPoint().getY() <= 300) {
                     String nombre = JOptionPane.showInputDialog("Cual es tu nombre?");
                     try {
@@ -1046,12 +1064,15 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     }
 
                 }
+                //ventana de instrucciones
                 if (e.getPoint().getY() >= 300 && e.getPoint().getY() <= 400) {
                     ventana = 3;
                 }
+                //ventana de opciones
                 if (e.getPoint().getY() >= 455 && e.getPoint().getY() <= 550) {
                     ventana = 4;
                 }
+                //ventana de creditos
                 if (e.getPoint().getY()>= 600 && e.getPoint().getY() <= 700){
                     ventana = 5;
                 }
@@ -1096,12 +1117,16 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
      * En este metodo se dibuja la imagen con la posicion actualizada, ademas
      * que cuando la imagen es cargada te despliega una advertencia.
      *
-     * @paramg es el <code>objeto grafico</code> usado para dibujar.
+     * @param g es el <code>objeto grafico</code> usado para dibujar.
      */
     public void paint1(Graphics g) {
         if (camion != null) {
             //Dibuja la imagen en la posicion actualizada            
             switch(ventana){
+                /**
+                 * Este caso representa la ventana de inicio donde se despliega el menu principal
+                 * Aqui se puede mover a diferentes ventanas.
+                 */
                 case 1:
                     g.drawImage(play.getImagenI(), play.getPosX(), play.getPosY(), this);
                     g.drawImage(options.getImagenI(), options.getPosX(), options.getPosY(), this);
@@ -1114,7 +1139,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     g.drawString("Playing as: " + nombreJugador,270,280);
                     break;
                    
-                    
+                /**
+                 * En este caso es donde se lleva acabo el juego.
+                 */
                 case 2:
                     if (cambio < 11){
                         g.drawImage(desierto.getImagenI(), desierto.getPosX(), desierto.getPosY(), this);
@@ -1182,9 +1209,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                         g.drawImage(camion.getImagenI(), camion.getPosX(), camion.getPosY(), this);    
                         }
                     }
-//                    for (Mutante cac:cactus){
-//                        g.drawImage(cac.getImagenI(), cac.getPosX(), cac.getPosY(), this);
-//                    }
+//                  for (Mutante cac:cactus){
+//                     g.drawImage(cac.getImagenI(), cac.getPosX(), cac.getPosY(), this);
+//                  }
                     g.drawImage(bar, 0, 20, this);
                     camionCenterX = (int) (camion.getPosX()+camion.getAncho()/2);
                     camionCenterY = (int) (camion.getPosY()+camion.getAlto()/2);
@@ -1289,7 +1316,10 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                         }
                     }
                     break;
-                    
+
+                /**
+                 * En esta ventana tienen las instrucciones del juego
+                 */
                 case 3:
                     g.setColor(Color.white);
                     g.setFont(new Font("default", Font.BOLD, 20));
@@ -1297,13 +1327,19 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     g.drawString("Agregar boton para regresar a menu",100,150);
                     break;
                     
+                /**
+                 * En esta ventana estan las opciones de juego
+                 */    
                 case 4:
                     g.setColor(Color.white);
                     g.setFont(new Font("default", Font.BOLD, 20));
                     g.drawString("Agregar imagen con instrucciones",100,100);
                     g.drawString("Agregar boton para regresar a menu",100,150);
                     break;
-                    
+                
+                /**
+                 * Aqui se tienen los creditos del juego
+                 */
                 case 5:
                     g.drawImage(credits, 0, 0, this);
                     break;
@@ -1314,7 +1350,12 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             g.drawString("No se cargo la imagen..", 20, 20);
         }
     }
-   
+
+    /**
+     * Este metodo itera por el arreglo de puntajes y los imprime en el
+     * archivo nombreArchivoHighscores
+     * @throws IOException 
+     */
     public void grabaArchivoHighscores() throws IOException {
         PrintWriter fileOut = new PrintWriter(new FileWriter(nombreArchivoHighscores));
         for (int i = 0; i < puntajes.size(); i++) {
@@ -1325,6 +1366,10 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         fileOut.close();
     }
     
+    /**
+     * Metodo utilizado para tomar los mejores 10 puntajes del juego.
+     * @throws IOException 
+     */
     public void cargarArchivoHighscores() throws IOException {
         BufferedReader fileIn;
         try {
@@ -1332,11 +1377,14 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         } catch (FileNotFoundException e) {
             File nom = new File(nombreArchivoHighscores);
             PrintWriter fileOut = new PrintWriter(nom);
-            fileOut.println("alguien,0\nalguien,0\nalguien,0\nalguien,0\nalguien,0\nalguien,0\nalguien,0\nalguien,0\nalguien,0\nalguien,0");
+            //Crea 10 juegos ficticios para rellenar la lista
+            fileOut.println("alguien,0\nalguien,0\nalguien,0\nalguien,0\nalguien,"
+                    + "0\nalguien,0\nalguien,0\nalguien,0\nalguien,0\nalguien,0");
             fileOut.close();
             fileIn = new BufferedReader(new FileReader(nombreArchivoHighscores));
         }
         
+        // Itera por los renglones del archivo para agregarlos al arreglo puntajes
         String dato = fileIn.readLine();
         while (dato != null) {
             arr = dato.split(",");
@@ -1349,12 +1397,21 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         fileIn.close();
     }
     
+    /**
+     * Metodo que escribe en el archivo nombreArchivoJugador el nombre del jugador actual.
+     * @throws IOException 
+     */
     public void grabaArchivoNombre() throws IOException {
         PrintWriter fileOut = new PrintWriter(new FileWriter(nombreArchivoJugador));
         fileOut.println(nombreJugador);
         fileOut.close();
     }
 
+    /**
+     * Metodo que extrae del archivo nombreArchivoJugador el nombre del jugador actual
+     * y lo asigna a la variable nombreJugador.
+     * @throws IOException 
+     */
     public void cargarNombreJugador() throws IOException {
         BufferedReader fileIn;
         try {
@@ -1371,7 +1428,11 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         fileIn.close();
     }
 
+    /**
+     * Metodo que reinicia todas las variables del juego para que se pueda volver a jugar
+     */
     private void reiniciarJuego() {
+        // Reinicia los valores por default
         numInventory = 0;
         ventana = 1;
         vidaJugador = 100;
@@ -1388,9 +1449,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         numToolboxNivel = 40;
         numAcidNivel = 30;
         scoreJugador = 0;
-        
+        //Quita la pausa del juego
         pausa = false;
-        
+        // Limpia las listas de objetos del juego anterior
         mutantes.clear();
         mRojo.clear();
         mElectro.clear();
@@ -1399,9 +1460,10 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         toolbox.clear();
         acid.clear();
         acidItem.clear();
+        //Coloca de nuevo al camion en su posicion inicial
         camion.setPosX(getWidth()/2);
         camion.setPosY(getHeight()/2);
-        
+        //Crea las armas del jugador
         cactus.push(new Mutante(206-30, 410, imCactus, velocidadCalle, 1));
         cactus.push(new Mutante(594, 410, imCactus, velocidadCalle, 1));
     }

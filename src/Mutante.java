@@ -12,14 +12,15 @@
     import java.awt.Toolkit;
 
 public class Mutante extends Base{
-    private int velocidad;
-    private int damage;
+    private int velocidad; //Velocidad del mutante
+    private int damage; //Daño hecho por el mutante
     /**
      * Metodo constructor usado para crear el objeto Malo
      * @param posX es la <code>posicion en x</code> del objeto.
      * @param posY es la <code>posicion en y</code> del objeto.
-     * @param vel es la <code>velocidad</code> del objeto.
-     * @param conteo es un <code>contador</code> del objeto.
+     * @param imagen es la <code>imagen</code> del objeto.
+     * @param v es la <code>velocidad</code> del objeto.
+     * @param d es un <code>contador</code> del objeto.
      */
     public Mutante(int posX, int posY, Image imagen,int v, int d) {
         super(posX,posY,imagen);

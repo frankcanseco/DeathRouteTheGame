@@ -20,8 +20,7 @@ public class Jugador extends Base{
      * Metodo constructor usado para crear el objeto Malo
      * @param posX es la <code>posicion en x</code> del objeto.
      * @param posY es la <code>posicion en y</code> del objeto.
-     * @param vel es la <code>velocidad</code> del objeto.
-     * @param conteo es un <code>contador</code> del objeto.
+     * @param imagen es el <code>icono</code> del jugador.
      */
     public Jugador(int posX, int posY, Image imagen) {
         super(posX,posY,imagen);
