@@ -12,6 +12,12 @@ public class Fondo extends Base {
     private int posX;    //posicion en x.       
     private int posY;    //posicion en y.
 
+    /**
+     * Constructor del Objecto Fondo.
+     * @param posX es la <code>posicion en x</code> del objeto.
+     * @param posY es la <code>posicion en y</code> del objeto.
+     * @param m es la <code>imagen<code>  del fondo.
+     */
     public Fondo(int posX, int posY, Image m) {
 
         super(posX, posY, m);	//constructor

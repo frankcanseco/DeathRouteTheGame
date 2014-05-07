@@ -14,10 +14,10 @@ import java.util.ArrayList;
  */
 public class Animacion {
 
-    private ArrayList cuadros;
-    private int indiceCuadroActual;
-    private long tiempoDeAnimacion;
-    private long duracionTotal;
+    private ArrayList cuadros; // Arreglo de imagenes de la animacion
+    private int indiceCuadroActual; // Cuadro de la animacion que esta activo
+    private long tiempoDeAnimacion; // Tiempo de Animacion
+    private long duracionTotal; // Tiempo total de animacion
 
     /**
      * Crea una nueva Animacion vacía
@@ -45,6 +45,7 @@ public class Animacion {
 
     /**
      * Actualiza la imagen (cuadro) actual de la animación, si es necesario.
+     * @param tiempoTranscurrido es el <code>tiempo de animacion</code> .
      */
     public synchronized void actualiza(long tiempoTranscurrido) {
         if (cuadros.size() > 1) {
@@ -73,37 +74,67 @@ public class Animacion {
         }
     }
 
+    /**
+     * Metodo de Animacion que regresa el cuadro especificado
+     * @param i es el <code>numero de cuadro<code> de la animacion
+     * @return cuadroDeAnimacion es el <code>cuadro de animacion<code> especificado
+     */
     private cuadroDeAnimacion getCuadro(int i) {
         return (cuadroDeAnimacion) cuadros.get(i);
     }
 
+    
     public class cuadroDeAnimacion {
 
-        Image imagen;
-        long tiempoFinal;
+        Image imagen; //Imagen del cuadro
+        long tiempoFinal; //Tiempo de animacion
 
+        /**
+         * Inicializa un cuadro vacio
+         */
         public cuadroDeAnimacion() {
             this.imagen = null;
             this.tiempoFinal = 0;
         }
 
+        /**
+         * Inicializa un cuadro de animacion con la imagen y el tiempoFinal
+         * @param imagen la <code>imagen<code> de la animacion
+         * @param tiempoFinal es el <code>tiempo final<code> de la animacion
+         */
         public cuadroDeAnimacion(Image imagen, long tiempoFinal) {
             this.imagen = imagen;
             this.tiempoFinal = tiempoFinal;
         }
 
+        /**
+         * Regresa la imagen del cuadro
+         * @return imagen es la <code>imagen<code> de la animacion
+         */
         public Image getImagen() {
             return imagen;
         }
 
+        /**
+         * Regresa el tiempo final del objecto
+         * @return tiempoFinal <code> tiempo final del cuadro<code>
+         */
         public long getTiempoFinal() {
             return tiempoFinal;
         }
 
+        /**
+         * Usado para asignar imagen
+         * @param imagen  asigna la <code>imagen<code> del cuadro
+         */
         public void setImagen(Image imagen) {
             this.imagen = imagen;
         }
 
+        /**
+         * Usado para asignar tiempo final
+         * @param tiempoFinal asigna el <code>tiempo final<code> del cuadro
+         */
         public void setTiempoFinal(long tiempoFinal) {
             this.tiempoFinal = tiempoFinal;
         }

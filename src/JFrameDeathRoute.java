@@ -926,7 +926,10 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     }
                     g.setColor(Color.red);
                     g.setFont(new Font("default", Font.BOLD, 30));
-                    g.drawString(""+vidaJugador+"%", 30, 127);
+                    if(vidaJugador>=0)
+                        g.drawString(""+vidaJugador+"%", 30, 127);
+                    else
+                        g.drawString(""+0+"%", 30, 127);
                     break;
                     
                 case 3:
