@@ -623,6 +623,10 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         if (e.getKeyCode() == KeyEvent.VK_P) {
             pausa = !pausa;
         }
+        
+        if (e.getKeyCode() == KeyEvent.VK_Q && pausa){
+            reiniciarJuego();
+        }
          lanzaAcido = false;
     }
 
@@ -775,12 +779,14 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     g.setFont(new Font("default", Font.BOLD, 20));
                     g.setColor(Color.green);
                     g.drawString(""+nombreJugador,40, 70);
-                    g.setColor(Color.yellow);
-                    g.drawString("Mile "+cambio,370, 100);
-                    g.setColor(Color.red);
-                    g.setFont(new Font("default", Font.BOLD, 40));
                     if(pausa){
-                        g.drawString("PAUSA",340, 70);
+                        g.setColor(Color.red);
+                        g.setFont(new Font("default", Font.BOLD, 40));
+                        g.drawString("Pause",340, 70);
+                        g.drawString("Press 'Q' to Quit",235, 120);
+                    } else {
+                        g.setColor(Color.yellow);
+                        g.drawString("Mile " + cambio, 370, 100);
                     }
                     g.setColor(Color.red);
                     g.setFont(new Font("default", Font.BOLD, 30));
@@ -885,6 +891,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         numToolboxNivel = 40;
         numAcidNivel = 30;
         scoreJugador = 0;
+        
+        pausa = false;
         
         mutantes.clear();
         restos.clear();
