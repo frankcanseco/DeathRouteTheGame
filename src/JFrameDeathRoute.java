@@ -104,9 +104,14 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private int counterToolbox;
     private int counterAcid;
     private int numInventory;
+    private int movimiento;
     private long tiempoActual;
     private long tiempoZombie;
     private boolean guardar;
+    private boolean movU;
+    private boolean movR;
+    private boolean movL;
+    private boolean movD;
     private String nombreArchivoHighscores;    //Nombre del archivo.
     private boolean lanzaAcido;
     private String nombreArchivo;    //Nombre del archivo.
@@ -126,6 +131,10 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     }
 
     public void init(){
+        movU = false;
+        movR = false;
+        movD = false;
+        movL = false;
         ventana = 1;//se inicializa con menu
         cambio = 1;
         camionVx =0;
@@ -137,7 +146,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         counterToolbox = 40;
         counterAcid = 0;
         numInventory = 0;
-        damageZombie = 11;
+        damageZombie = 33;
         numCactusNivel = 50;
         numToolboxNivel = 40;
         numAcidNivel = 30;
@@ -273,6 +282,24 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
      */
     public void actualiza() {
         if (ventana == 2){
+            camionVy = 0;
+            camionVx = 0;
+            if (movU && !movD){
+                camionVy = -4;
+            }
+            if (movD && !movU){
+                camionVy = 4;
+            }
+            if (movR && !movL){
+                camionVx = 4;
+            }
+            if (movL && !movR){
+                camionVx = -4;
+            }
+            if ((Math.abs(camionVx)+Math.abs(camionVy)) == 8){
+                camionVy -= camionVy/4;
+                camionVx -= camionVx/4;
+            }
             camion.setPosX(camion.getPosX()+camionVx);
             camion.setPosY(camion.getPosY()+camionVy);
 
@@ -561,35 +588,19 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     }
     
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_A){
-            camionVx = -4;
+        if(e.getKeyCode() == KeyEvent.VK_W){
+             movU = true;
         }
-        else{
-            if (e.getKeyCode() == KeyEvent.VK_D){
-                camionVx = 4;
-            }
+        if(e.getKeyCode() == KeyEvent.VK_D){
+             movR = true;
         }
-        if (e.getKeyCode() == KeyEvent.VK_W){
-            if (camionVx != 0){
-            camionVy = -3;
-            camionVx = (int) (camionVx/4)*3;
-            }
-            else{
-                camionVy = -4;
-            }
+        if(e.getKeyCode() == KeyEvent.VK_S){
+             movD = true;
         }
-        else{
-            if (e.getKeyCode() == KeyEvent.VK_S){
-                if (camionVx != 0){
-                    camionVy = 3;
-                    camionVx = (int) (camionVx/4)*3;
-                }
-                else{
-                    camionVy = 5;
-                }
-            }
+        if(e.getKeyCode() == KeyEvent.VK_A){
+             movL = true;
         }
-        if(e.getKeyCode() == KeyEvent.VK_L){
+        if(e.getKeyCode() == KeyEvent.VK_SPACE){
             lanzaAcido = true;
         }
     } 
@@ -598,14 +609,18 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     }
 
     public void keyReleased(KeyEvent e) {
-         
-         if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_D){
-             camionVx = 0;
-         }
-         if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_S){
-             camionVy = 0;
-         }
-         lanzaAcido = false;
+       if(e.getKeyCode() == KeyEvent.VK_W){
+             movU = false;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_D){
+             movR = false;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_S){
+             movD = false;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_A){
+             movL = false;
+        }
     }
 
     public void mouseClicked(MouseEvent e) {
@@ -753,7 +768,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     
                     g.setColor(Color.white);
                     g.setFont(new Font("default", Font.BOLD, 50));
-                    g.drawString(""+scoreJugador,700, 110);
+                    g.drawString(""+scoreJugador,690, 110);
                     g.setFont(new Font("default", Font.BOLD, 20));
                     g.setColor(Color.green);
                     g.drawString(""+nombreJugador,40, 70);
