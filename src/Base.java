@@ -14,6 +14,7 @@ public class Base {
 	private int posX;    //posicion en x.       
 	private int posY;	//posicion en y.
 	private ImageIcon icono;    //icono.
+        
 	/**
 	 * Metodo constructor usado para crear el objeto
 	 * @param posX es la <code>posicion en x</code> del objeto.
