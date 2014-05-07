@@ -112,12 +112,15 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private boolean movR;
     private boolean movL;
     private boolean movD;
+    private boolean pausa;
     private String nombreArchivoHighscores;    //Nombre del archivo.
     private boolean lanzaAcido;
     private String nombreArchivo;    //Nombre del archivo.
     private String nombreArchivoJugador;
     private String nombreJugador;
-    private Vector vec;    // Objeto vector para agregar el puntaje.
+    private String [] arr;
+    private Puntaje puntActual;
+    private Vector puntajes;    // Objeto vector para agregar el puntaje.
     private int numCactusNivel; // numero de cactus por nivel
     private int numToolboxNivel; // numero de toolbox por nivel
     private int numAcidNivel; // numero de acid por nivel
@@ -152,6 +155,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         numAcidNivel = 30;
         scoreJugador   = 0;
         lanzaAcido = false;
+        pausa = false;
         Selva = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/selva.png"));
         Ciudad = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/ciudad.png"));
         Desierto = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/desierto.png"));
@@ -195,7 +199,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         this.setBackground(Color.BLACK);
         nombreArchivoHighscores = "Puntaje.txt";
         nombreArchivoJugador = "UltimoJugador.txt";
-        vec = new Vector();
+        puntajes = new Vector();
         addKeyListener(this);   
         addMouseListener(this);
         velocidadCactus = 3;
@@ -232,40 +236,50 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     public void run() {
         
         while (true) {
-            if (vidaJugador > 0) {
+            if (vidaJugador > 0 && !pausa) {
                 actualiza();
                 checaColision();
                 damageTempo += 1;
                 counterCactus += 1;
                 counterToolbox += 1;
                 counterAcid += 1;
-            } else {
+            } 
+            
+            if (vidaJugador <= 0){
+                
+                try {
+                    cargarArchivoHighscores();
+                } catch (IOException ex) {
+                }
+                puntActual = new Puntaje(nombreJugador, scoreJugador);
+                for(int i = 0; i < puntajes.size(); i++){
+                    Puntaje puntUltimo = (Puntaje) puntajes.get(i);
+                    if (puntActual.getPuntos() > puntUltimo.getPuntos()){
+                        puntajes.insertElementAt(puntActual, i);
+                        break;
+                    }
+                }
                 JOptionPane.showMessageDialog(null,
-                        "1. -"
-                                + "2. -"
-                                + "3. -"
-                                + "4. -","Highscores",
+                        "1. " + ((Puntaje)puntajes.get(0)).getNombre() + " " + ((Puntaje)puntajes.get(0)).getPuntos() + "\n" +
+                        "2. " + ((Puntaje)puntajes.get(1)).getNombre() + " " + ((Puntaje)puntajes.get(1)).getPuntos() + "\n" +
+                        "3. " + ((Puntaje)puntajes.get(2)).getNombre() + " " + ((Puntaje)puntajes.get(2)).getPuntos() + "\n" +
+                        "4. " + ((Puntaje)puntajes.get(3)).getNombre() + " " + ((Puntaje)puntajes.get(3)).getPuntos() + "\n" +
+                        "5. " + ((Puntaje)puntajes.get(4)).getNombre() + " " + ((Puntaje)puntajes.get(4)).getPuntos() + "\n" +
+                        "6. " + ((Puntaje)puntajes.get(5)).getNombre() + " " + ((Puntaje)puntajes.get(5)).getPuntos() + "\n" +
+                        "7. " + ((Puntaje)puntajes.get(6)).getNombre() + " " + ((Puntaje)puntajes.get(6)).getPuntos() + "\n" +
+                        "8. " + ((Puntaje)puntajes.get(7)).getNombre() + " " + ((Puntaje)puntajes.get(7)).getPuntos() + "\n" +
+                        "9. " + ((Puntaje)puntajes.get(8)).getNombre() + " " + ((Puntaje)puntajes.get(8)).getPuntos() + "\n" +
+                        "10. " + ((Puntaje)puntajes.get(9)).getNombre() + " " + ((Puntaje)puntajes.get(9)).getPuntos() + "\n"
+                                ,"Highscores",
                         JOptionPane.PLAIN_MESSAGE);
                 reiniciarJuego();
+                try {
+                    grabaArchivoHighscores();
+                } catch (IOException ex) {
+                }
             }
             // Se actualiza el <code>Applet</code> repintando el contenido.
             repaint();
-            if (guardar) {
-                guardar = false;
-                try {
-                    //leeArchivo();    
-                    //lee el contenido del archivo
-                    //Agrega el contenido del nuevo puntaje al vector.
-                    //guarda posX del carrodel carro, posX y posY y velX y velY popo
-                    vec.removeAllElements();
-                    //vec.add(new Puntaje());
-                    //Graba el vector en el archivo.
-                    grabaArchivoHighscores();
-                } catch (IOException ex) {
-
-                    System.out.println("Error en " + ex.toString());
-                }
-            }
             try {
                 // El thread se duerme.
                 Thread.sleep(20);
@@ -621,6 +635,13 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         if(e.getKeyCode() == KeyEvent.VK_A){
              movL = false;
         }
+        if (e.getKeyCode() == KeyEvent.VK_Q && pausa){
+            reiniciarJuego();
+        }
+        if (e.getKeyCode() == KeyEvent.VK_P) {
+            pausa = !pausa;
+        }
+        lanzaAcido = false;
     }
 
     public void mouseClicked(MouseEvent e) {
@@ -772,8 +793,15 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                     g.setFont(new Font("default", Font.BOLD, 20));
                     g.setColor(Color.green);
                     g.drawString(""+nombreJugador,40, 70);
-                    g.setColor(Color.yellow);
-                    g.drawString("Mile "+cambio,370, 100);
+                    if(pausa){
+                        g.setColor(Color.red);
+                        g.setFont(new Font("default", Font.BOLD, 40));
+                        g.drawString("Pause",340, 70);
+                        g.drawString("Press 'Q' to Quit",235, 120);
+                    } else {
+                        g.setColor(Color.yellow);
+                        g.drawString("Mile " + cambio, 370, 100);
+                    }
                     g.setColor(Color.red);
                     g.setFont(new Font("default", Font.BOLD, 30));
                     g.drawString(""+vidaJugador+"%", 30, 127);
@@ -806,28 +834,38 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
    
     public void grabaArchivoHighscores() throws IOException {
         PrintWriter fileOut = new PrintWriter(new FileWriter(nombreArchivoHighscores));
-        for (int i = 0; i < vec.size(); i++) {
+        for (int i = 0; i < puntajes.size(); i++) {
             Puntaje x;
-            x = (Puntaje) vec.get(i);
+            x = (Puntaje) puntajes.get(i);
             fileOut.println(x.toString());
         }
         fileOut.close();
     }
+    
     public void cargarArchivoHighscores() throws IOException {
         BufferedReader fileIn;
         try {
             fileIn = new BufferedReader(new FileReader(nombreArchivoHighscores));
         } catch (FileNotFoundException e) {
-            File nombreJug = new File(nombreArchivoJugador);
-            PrintWriter fileOut = new PrintWriter(nombreJug);
-            fileOut.println("N/A");
+            File nom = new File(nombreArchivoHighscores);
+            PrintWriter fileOut = new PrintWriter(nom);
+            fileOut.println("alguien,0\nalguien,0\nalguien,0\nalguien,0\nalguien,0\nalguien,0\nalguien,0\nalguien,0\nalguien,0\nalguien,0");
             fileOut.close();
-            fileIn = new BufferedReader(new FileReader(nombreArchivoJugador));
+            fileIn = new BufferedReader(new FileReader(nombreArchivoHighscores));
         }
-        nombreJugador = fileIn.readLine();
+        
+        String dato = fileIn.readLine();
+        while (dato != null) {
+            arr = dato.split(",");
+            String nombre = arr[0];
+            int sc = (Integer.parseInt(arr[1]));
+            puntajes.add(new Puntaje(nombre, sc));
+            dato = fileIn.readLine();
 
+        }
         fileIn.close();
     }
+    
     public void grabaArchivoNombre() throws IOException {
         PrintWriter fileOut = new PrintWriter(new FileWriter(nombreArchivoJugador));
         fileOut.println(nombreJugador);
@@ -851,28 +889,36 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     }
 
     private void reiniciarJuego() {
+        numInventory = 0;
         ventana = 1;
         vidaJugador = 100;
         cambio = 1;
         camionVx =0;
         camionVy = 0;
-        velocidadCalle = 15;
+        velocidadCalle = 9;
         damageTempo = 50;
         counterCactus = 80;
         counterToolbox = 40;
-        counterAcid = 80;
+        counterAcid = 0;
         damageZombie = 11;
         numCactusNivel = 50;
         numToolboxNivel = 40;
         numAcidNivel = 30;
-        scoreJugador   = 0;
+        scoreJugador = 0;
+        
+        pausa = false;
+        
         mutantes.clear();
         restos.clear();
         cactus.clear(); 
         toolbox.clear();
         acid.clear();
+        acidItem.clear();
         camion.setPosX(getWidth()/2);
         camion.setPosY(getHeight()/2);
+        
+        cactus.push(new Mutante(206-30, 410, imCactus, velocidadCalle, 1));
+        cactus.push(new Mutante(594, 410, imCactus, velocidadCalle, 1));
     }
     
 
