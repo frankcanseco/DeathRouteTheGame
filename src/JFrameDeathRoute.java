@@ -10,6 +10,7 @@
  */
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.applet.AudioClip;
 import java.awt.Image;
 import java.awt.Color;
 import java.awt.Font;
@@ -136,6 +137,13 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     private int intento;
     private String abc;
     private String[] password;
+    private SoundClip dying;    // Objetos de sonido Audioclip
+    private SoundClip engine;    // Objeto SoundClip
+    private SoundClip heartbeat;    // Objeto SoundClip
+    private SoundClip honk;    // Objeto SoundClip
+    private SoundClip splash;    // Objeto SoundClip
+    private SoundClip splash2;    
+
     StringBuilder sb = new StringBuilder();
 
     public JFrameDeathRoute(){
@@ -195,6 +203,14 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         imBubbles = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/burbujas.gif"));
         imInventoryAcid = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/acidInventory.png"));
         imCactus = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/cactus.png"));
+        //URL eaURL = this.getClass().getResource("sounds/elephant.wav");
+        dying = new SoundClip("/sounds/dying.wav");
+        engine = new SoundClip("/sounds/engine.wav");
+        heartbeat = new SoundClip("/sounds/heartbeat.wav");
+        honk = new SoundClip("/sounds/honk.wav");
+        splash = new SoundClip("/sounds/splash.wav");
+        splash2 = new SoundClip("/sounds/splash2.wav");
+
         camion = new Jugador((int) (this.getWidth()/2),(int)((this.getHeight()/2)),cam);//se inicializan los objetos
         carretera = new Fondo(206, 0, Calle);
         carretera2 = new Fondo(206, -820, Calle);
@@ -426,7 +442,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             if(counterToolbox > 250 && numToolboxNivel>0){ 
                 int posrX = 206 + (int) (Math.random() * this.getWidth()/2);    //toolbox aparecen en lugares random en la orilla de arriba
                 int posrY = -2;
-                toolboxObj = new Mutante(posrX, posrY, imToolbox, velocidadCalle, 6);
+                toolboxObj = new Mutante(posrX, posrY, imToolbox, velocidadCalle, 10);
                 toolbox.add(toolboxObj);
                 counterToolbox = 0;
                 numToolboxNivel--;
@@ -551,7 +567,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
      * las orillas del <code>Applet</code>.
      */
     public void checaColision() {
-
+        engine.play();
         if (camion.getPosX()<206){//Checa que el camion  no se salga de la carretera
             camion.setPosX(206);
         }
