@@ -739,7 +739,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
      * las orillas del <code>Applet</code>.
      */
     public void checaColision() {
-        engine.play();
+        //engine.play();
         if (camion.getPosX()<206){//Checa que el camion  no se salga de la carretera
             camion.setPosX(206);
         }
@@ -769,6 +769,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         for (Mutante cac:cactus) {
             for (Mutante mut:mutantes) {
                 if(mut.intersecta(camion)){
+                    splash.play();
                     damageTempo = 0;
                     vidaJugador-=mut.getDamage();
                     mut.setDamage(0);
@@ -779,6 +780,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 }
                 
                 if(cac.intersecta(mut)){
+                    splash2.play();
                     mutantes.remove(mut);
                     restos.push(new Mutante(mut.getPosX(),mut.getPosY(),sangre,0,0));
                     scoreJugador+=50;
@@ -788,6 +790,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             }
             for (Mutante mut:mRojo) {
                 if(mut.intersecta(camion)){
+                    dying.play();
+                    heartbeat.play();
                     damageTempo = 0;
                     matrix = true;
                     matrixDamage = 0;
@@ -831,6 +835,8 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
                 }
                 
                 if(cac.intersecta(mut)){
+                    splash2.play();
+                    dying.play();
                     mRojo.remove(mut);
                     restos.push(new Mutante(mut.getPosX(),mut.getPosY(),sangre,0,0));
                     scoreJugador+=100;
@@ -840,6 +846,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             }
             for (Mutante mut:mElectro) {
                 if(mut.intersecta(camion)){
+                    dying.play();
                     electro=true;
                     tiempoElectro = 0;
                     intento = 0;
@@ -874,6 +881,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
 
         for(Mutante tool:toolbox){
             if(tool.intersecta(camion)){
+                heartbeat.play();
                 vidaJugador+=tool.getDamage();
                 tool.setDamage(0);
                 toolbox.remove(tool);
@@ -892,6 +900,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         for(Mutante ai:acidItem){
             for(Mutante mut:mutantes){
                 if(ai.intersecta(mut)){
+                    splash2.play();
                     mutantes.remove(mut);
                     restos.push(new Mutante(mut.getPosX(),mut.getPosY(),sangre,0,0));
                     scoreJugador+=30;
@@ -901,6 +910,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             }
             for(Mutante mut:mRojo){
                 if(ai.intersecta(mut)){
+                    splash2.play();
                     mRojo.remove(mut);
                     restos.push(new Mutante(mut.getPosX(),mut.getPosY(),sangre,0,0));
                     scoreJugador+=60;
@@ -910,6 +920,7 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
             }
             for(Mutante mut:mElectro){
                 if(ai.intersecta(mut)){
+                    splash2.play();
                     mElectro.remove(mut);
                     restos.push(new Mutante(mut.getPosX(),mut.getPosY(),sangre,0,0));
                     scoreJugador+=90;
@@ -962,6 +973,9 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
         }
         if(e.getKeyCode() == KeyEvent.VK_A){
              movL = true;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_SHIFT){
+             honk.play();
         }
         if(e.getKeyCode() == KeyEvent.VK_SPACE){
             lanzaAcido = true;
@@ -1056,8 +1070,11 @@ public class JFrameDeathRoute extends JFrame implements Runnable, KeyListener, M
     public void mouseClicked(MouseEvent e) {
         if (ventana == 1){
             if(e.getPoint().getX()>= 270 && e.getPoint().getX() <= 560){
+
                 //boton para entrar al juego
                 if (e.getPoint().getY()>= 150 && e.getPoint().getY() <= 250){
+                    engine.setLooping(true);
+                    engine.play();
                     ventana = 2;
                     tiempoActual = System.currentTimeMillis();
                     tiempoZombie = System.currentTimeMillis();
